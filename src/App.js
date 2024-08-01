@@ -123,47 +123,45 @@ const ElectricalManagementApp = () => {
           <>
             <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
               <div className="p-4">
-                <div className="flex flex-wrap -mx-2 mb-4">
-                  <div className="flex w-full mb-4 space-x-2">
-                    <select
-                      className="flex-grow p-2 border rounded-l"
-                      value={floor}
-                      onChange={(e) => setFloor(e.target.value)}
-                    >
-                      <option value="">전체 층</option>
-                      {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
-                        <option key={floorOption} value={floorOption}>{floorOption}</option>
-                      ))}
-                    </select>
-                    <input
-                      type="text"
-                      className="flex-grow p-2 border"
-                      placeholder="검색어 입력"
-                      value={searchText}
-                      onChange={(e) => setSearchText(e.target.value)}
-                    />
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded-r flex-shrink-0"
-                      onClick={handleSearch}
-                    >
-                      <Search size={20} />
-                    </button>
-                  </div>
-                  <div className="flex w-full justify-center space-x-2">
-                    {['all', 'single', 'three-phase-three-wire', 'three-phase-four-wire'].map((type) => (
-                      <button
-                        key={type}
-                        className={`px-3 py-1 text-sm rounded-full ${
-                          filterType === type ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-                        }`}
-                        onClick={() => setFilterType(type)}
-                      >
-                        {type === 'all' ? '전체' : 
-                         type === 'single' ? '단상' : 
-                         type === 'three-phase-three-wire' ? '3상3선' : '3상4선'}
-                      </button>
+                <div className="flex flex-wrap -mx-2 mb-4 space-y-2 md:space-y-0 md:space-x-2">
+                  <select
+                    className="flex-grow p-2 border rounded"
+                    value={floor}
+                    onChange={(e) => setFloor(e.target.value)}
+                  >
+                    <option value="">전체 층</option>
+                    {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
+                      <option key={floorOption} value={floorOption}>{floorOption}</option>
                     ))}
-                  </div>
+                  </select>
+                  <input
+                    type="text"
+                    className="flex-grow p-2 border rounded"
+                    placeholder="검색어 입력"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded flex-shrink-0"
+                    onClick={handleSearch}
+                  >
+                    <Search size={20} />
+                  </button>
+                </div>
+                <div className="flex justify-center space-x-2">
+                  {['all', 'single', 'three-phase-three-wire', 'three-phase-four-wire'].map((type) => (
+                    <button
+                      key={type}
+                      className={`px-3 py-1 text-sm rounded-full ${
+                        filterType === type ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                      }`}
+                      onClick={() => setFilterType(type)}
+                    >
+                      {type === 'all' ? '전체' : 
+                       type === 'single' ? '단상' : 
+                       type === 'three-phase-three-wire' ? '3상3선' : '3상4선'}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
