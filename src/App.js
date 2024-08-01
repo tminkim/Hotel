@@ -135,7 +135,8 @@ const ElectricalManagementApp = () => {
                     </select>
                     <input
                       type="text"
-                      className="flex-grow mr-2 p-2 border rounded"
+                      className="flex-grow-2 mr-2 p-2 border rounded"
+                      style={{ width: '40%' }}
                       placeholder="검색어 입력"
                       value={searchText}
                       onChange={(e) => setSearchText(e.target.value)}
