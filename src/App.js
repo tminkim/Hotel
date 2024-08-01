@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import PanZoom from 'react-easy-panzoom';
 
 const ElectricalManagementApp = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
@@ -10,7 +9,6 @@ const ElectricalManagementApp = () => {
   const [distributionBoards, setDistributionBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
-  const panZoomRef = useRef(null);
 
   const fetchCSVData = useCallback(async () => {
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
@@ -101,11 +99,6 @@ const ElectricalManagementApp = () => {
     return { x: x / 10, y: y / 10 };
   };
 
-  useEffect(() => {
-    if (panZoomRef.current) {
-      panZoomRef.current.zoomAbs(0, 0, 1); // 초기 줌 및 위치 설정
-    }
-  }, [selectedFloorPlan]);
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
@@ -130,45 +123,47 @@ const ElectricalManagementApp = () => {
           <>
             <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
               <div className="p-4">
-                <div className="flex mb-4">
-                  <select
-                    className="w-1/3 p-2 border rounded mr-2"
-                    value={floor}
-                    onChange={(e) => setFloor(e.target.value)}
-                  >
-                    <option value="">전체 층</option>
-                    {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
-                      <option key={floorOption} value={floorOption}>{floorOption}</option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    className="flex-grow p-2 border rounded-l"
-                    placeholder="검색어 입력"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-r flex items-center"
-                    onClick={handleSearch}
-                  >
-                    <Search size={20} />
-                  </button>
-                </div>
                 <div className="flex flex-wrap -mx-2 mb-4">
-                  {['all', 'single', 'three-phase-three-wire', 'three-phase-four-wire'].map((type) => (
-                    <button
-                      key={type}
-                      className={`m-2 px-3 py-1 text-sm rounded-full ${
-                        filterType === type ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-                      }`}
-                      onClick={() => setFilterType(type)}
+                  <div className="flex w-full mb-4 space-x-2">
+                    <select
+                      className="flex-grow p-2 border rounded-l"
+                      value={floor}
+                      onChange={(e) => setFloor(e.target.value)}
                     >
-                      {type === 'all' ? '전체' : 
-                       type === 'single' ? '단상' : 
-                       type === 'three-phase-three-wire' ? '3상3선' : '3상4선'}
+                      <option value="">전체 층</option>
+                      {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
+                        <option key={floorOption} value={floorOption}>{floorOption}</option>
+                      ))}
+                    </select>
+                    <input
+                      type="text"
+                      className="flex-grow p-2 border"
+                      placeholder="검색어 입력"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-r flex items-center"
+                      onClick={handleSearch}
+                    >
+                      <Search size={20} />
                     </button>
-                  ))}
+                  </div>
+                  <div className="flex w-full justify-center space-x-2">
+                    {['all', 'single', 'three-phase-three-wire', 'three-phase-four-wire'].map((type) => (
+                      <button
+                        key={type}
+                        className={`px-3 py-1 text-sm rounded-full ${
+                          filterType === type ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                        }`}
+                        onClick={() => setFilterType(type)}
+                      >
+                        {type === 'all' ? '전체' : 
+                         type === 'single' ? '단상' : 
+                         type === 'three-phase-three-wire' ? '3상3선' : '3상4선'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -176,30 +171,18 @@ const ElectricalManagementApp = () => {
             {selectedFloorPlan && (
               <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
                 <div className="relative">
-                <PanZoom
-                    ref={panZoomRef}
-                    minZoom={1}
-                    maxZoom={4}
-                    disableDoubleClickZoom
-                    autoCenter
-                    autoCenterZoomLevel={1}
-                    boundaryRatioVertical={1}
-                    boundaryRatioHorizontal={1}
-                    enableBoundingBox
-                  >
-                    <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto panzoom-element" />
-                    {filteredBoards.map((board, index) => {
-                      const { x, y } = getMarkerPosition(board['장소']);
-                      return (
-                        <div
-                          key={index}
-                          className="absolute w-3 h-3 bg-red-500 rounded-full"
-                          style={{ left: `${x}%`, top: `${y}%` }}
-                          title={board['분전반 명칭']}
-                        ></div>
-                      );
-                    })}
-                  </PanZoom>
+                  <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
+                  {filteredBoards.map((board, index) => {
+                    const { x, y } = getMarkerPosition(board['장소']);
+                    return (
+                      <div
+                        key={index}
+                        className="absolute w-3 h-3 bg-red-500 rounded-full"
+                        style={{ left: `${x}%`, top: `${y}%` }}
+                        title={board['분전반 명칭']}
+                      ></div>
+                    );
+                  })}
                 </div>
               </div>
             )}
