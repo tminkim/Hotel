@@ -115,6 +115,17 @@ const ElectricalManagementApp = () => {
     setInitialScale(newInitialScale);
   };
 
+  const transformOptions = {
+    limitToBounds: true,
+    minScale: 1,
+    centerZoomedOut: true,
+    doubleClick: { disabled: true },
+    panning: { excluded: ['input', 'select', 'button'] },
+    wheel: { step: 0.02 },
+    pinch: { step: 0.02 },
+    zoomAnimation: { animationTime: 0.5, animationType: 'ease-in-out' }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
@@ -186,26 +197,20 @@ const ElectricalManagementApp = () => {
                 <div className="relative w-full h-full">
                 <TransformWrapper
                   initialScale={initialScale}
-                  minScale={initialScale}
-                  centerZoomedOut={true}
-                  doubleClick={{ disabled: true }}
-                  panning={{ excluded: ['input', 'select', 'button'] }}
-                  wheel={{ step: 0.02 }}
-                  pinch={{ step: 0.02 }}
-                  zoomAnimation={{ animationTime: 0.5, animationType: 'ease-in-out' }}
+                  options={transformOptions}
                   onZoomStop={({ state, instance }) => {
-                    if (state.scale < initialScale) {
-                      instance.resetTransform(initialScale);
+                    if (state.scale < 1) {
+                      instance.resetTransform(1);
                     }
                   }}
                   onPinchStop={({ state, instance }) => {
-                    if (state.scale < initialScale) {
-                      instance.resetTransform(initialScale);
+                    if (state.scale < 1) {
+                      instance.resetTransform(1);
                     }
                   }}
                   onZoomChange={({ state, instance }) => {
-                    if (state.scale < initialScale) {
-                      instance.resetTransform(initialScale);
+                    if (state.scale < 1) {
+                      instance.resetTransform(1);
                     }
                   }}
                 >
