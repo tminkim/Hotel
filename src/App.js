@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import PanZoom from 'react-easy-panzoom';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const ElectricalManagementApp = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
@@ -10,8 +10,7 @@ const ElectricalManagementApp = () => {
   const [distributionBoards, setDistributionBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
-  const [initialZoom, setInitialZoom] = useState(1);
-  const [minZoom, setMinZoom] = useState(1);
+  const [initialScale, setInitialScale] = useState(1);
 
   const fetchCSVData = useCallback(async () => {
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
@@ -111,10 +110,9 @@ const ElectricalManagementApp = () => {
 
     const widthRatio = containerWidth / imgWidth;
     const heightRatio = containerHeight / imgHeight;
-    const newInitialZoom = Math.min(widthRatio, heightRatio);
+    const newInitialScale = Math.min(widthRatio, heightRatio);
 
-    setInitialZoom(newInitialZoom);
-    setMinZoom(newInitialZoom);
+    setInitialScale(newInitialScale);
   };
 
   return (
@@ -183,40 +181,38 @@ const ElectricalManagementApp = () => {
                 </div>
               </div>
             </div>
-
             {selectedFloorPlan && (
               <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4" style={{ width: '100%' }}>
                 <div className="relative w-full h-full">
-                  <PanZoom
-                    enablePan={true}
-                    enableZoom={true}
-                    zoomSpeed={0.4}
-                    autoCenter={false}
-                    minZoom={minZoom}
-                    maxZoom={4}
-                    style={{ touchAction: 'none' }}
-                    initialZoom={initialZoom}
-                    initialX={0}
-                    initialY={0}
+                  <TransformWrapper
+                    initialScale={initialScale}
+                    minScale={initialScale}
+                    doubleClick={{ disabled: true }}
+                    panning={{ excluded: ['input', 'select', 'button'] }}
+                    wheel={{ step: 0.1 }}
+                    pinch={{ step: 5 }}
+                    zoomAnimation={{ animationTime: 0.2 }}
                   >
-                    <img
-                      src={selectedFloorPlan}
-                      alt="Floor Plan"
-                      className="w-full h-full object-contain"
-                      onLoad={handleImageLoad}
-                    />
-                    {filteredBoards.map((board, index) => {
-                      const { x, y } = getMarkerPosition(board['장소']);
-                      return (
-                        <div
-                          key={index}
-                          className="absolute w-3 h-3 bg-red-500 rounded-full"
-                          style={{ left: `${x}%`, top: `${y}%` }}
-                          title={board['분전반 명칭']}
-                        ></div>
-                      );
-                    })}
-                  </PanZoom>
+                    <TransformComponent>
+                      <img
+                        src={selectedFloorPlan}
+                        alt="Floor Plan"
+                        className="w-full h-full object-contain"
+                        onLoad={handleImageLoad}
+                      />
+                      {filteredBoards.map((board, index) => {
+                        const { x, y } = getMarkerPosition(board['장소']);
+                        return (
+                          <div
+                            key={index}
+                            className="absolute w-3 h-3 bg-red-500 rounded-full"
+                            style={{ left: `${x}%`, top: `${y}%` }}
+                            title={board['분전반 명칭']}
+                          ></div>
+                        );
+                      })}
+                    </TransformComponent>
+                  </TransformWrapper>
                 </div>
               </div>
             )}
@@ -246,24 +242,6 @@ const ElectricalManagementApp = () => {
               </div>
             )}
           </>
-        )}
-
-        {activeTab === 'facilities' && (
-          <div className="bg-white shadow-md rounded-lg overflow-hidden">
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">시설물 현황</h3>
-              <p>시설물 현황 내용을 여기에 추가하세요.</p>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'manual' && (
-          <div className="bg-white shadow-md rounded-lg overflow-hidden">
-            <div className="p-4">
-              <h3 className="text-lg font-semibold">매뉴얼</h3>
-              <p>매뉴얼 내용을 여기에 추가하세요.</p>
-            </div>
-          </div>
         )}
       </div>
     </div>
