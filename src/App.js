@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import PanZoom from 'react-easy-panzoom';
 
 const ElectricalManagementApp = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
@@ -10,7 +10,6 @@ const ElectricalManagementApp = () => {
   const [distributionBoards, setDistributionBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
-  const [initialScale, setInitialScale] = useState(1);
 
   const fetchCSVData = useCallback(async () => {
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
@@ -101,20 +100,6 @@ const ElectricalManagementApp = () => {
     return { x: x / 10, y: y / 10 };
   };
 
-  const handleImageLoad = (e) => {
-    const img = e.target;
-    const imgWidth = img.naturalWidth;
-    const imgHeight = img.naturalHeight;
-    const containerWidth = img.parentElement.clientWidth;
-    const containerHeight = img.parentElement.clientHeight;
-
-    const widthRatio = containerWidth / imgWidth;
-    const heightRatio = containerHeight / imgHeight;
-    const newInitialScale = Math.min(widthRatio, heightRatio);
-
-    setInitialScale(newInitialScale);
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
@@ -139,31 +124,6 @@ const ElectricalManagementApp = () => {
           <>
             <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
               <div className="p-4">
-                <div className="flex items-center mb-4">
-                  <select
-                    className="flex-grow p-2 border rounded"
-                    value={floor}
-                    onChange={(e) => setFloor(e.target.value)}
-                  >
-                    <option value="">전체 층</option>
-                    {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
-                      <option key={floorOption} value={floorOption}>{floorOption}</option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    className="flex-grow p-2 border rounded mx-2"
-                    placeholder="검색어 입력"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
-                    onClick={handleSearch}
-                  >
-                    <Search size={20} />
-                  </button>
-                </div>
                 <div className="flex flex-wrap -mx-2 mb-4">
                   {['all', 'single', 'three-phase-three-wire', 'three-phase-four-wire'].map((type) => (
                     <button
@@ -179,38 +139,39 @@ const ElectricalManagementApp = () => {
                     </button>
                   ))}
                 </div>
+                <select
+                  className="w-full mb-4 p-2 border rounded"
+                  value={floor}
+                  onChange={(e) => setFloor(e.target.value)}
+                >
+                  <option value="">전체 층</option>
+                  {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
+                    <option key={floorOption} value={floorOption}>{floorOption}</option>
+                  ))}
+                </select>
+                <div className="flex">
+                  <input
+                    type="text"
+                    className="flex-grow p-2 border rounded-l"
+                    placeholder="검색어 입력"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-r flex items-center"
+                    onClick={handleSearch}
+                  >
+                    <Search size={20} />
+                  </button>
+                </div>
               </div>
             </div>
+
             {selectedFloorPlan && (
-              <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4" style={{ width: '100%' }}>
-                <div className="relative w-full h-full">
-                <TransformWrapper
-                  initialScale={initialScale}
-                  minScale={1}
-                  centerZoomedOut={true}
-                  doubleClick={{ disabled: true }}
-                  panning={{ excluded: ['input', 'select', 'button'] }}
-                  wheel={{ step: 0.02 }}
-                  pinch={{ step: 0.02 }}
-                  zoomAnimation={{ animationTime: 0.5, animationType: 'ease-in-out' }}
-                  onZoomStop={({ state, instance }) => {
-                    if (state.scale < 1) {
-                      instance.resetTransform(1);
-                    }
-                  }}
-                  onPinchStart={({ state, instance, event }) => {
-                    if (event.touches.length === 2) {
-                      instance.zoomToElement(event.target, state.scale);
-                    }
-                  }}
-                >
-                  <TransformComponent>
-                    <img
-                      src={selectedFloorPlan}
-                      alt="Floor Plan"
-                      className="w-full h-full object-contain"
-                      onLoad={handleImageLoad}
-                    />
+              <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
+                <div className="relative">
+                  <PanZoom>
+                    <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
                     {filteredBoards.map((board, index) => {
                       const { x, y } = getMarkerPosition(board['장소']);
                       return (
@@ -222,8 +183,7 @@ const ElectricalManagementApp = () => {
                         ></div>
                       );
                     })}
-                  </TransformComponent>
-                </TransformWrapper>
+                  </PanZoom>
                 </div>
               </div>
             )}
@@ -253,6 +213,24 @@ const ElectricalManagementApp = () => {
               </div>
             )}
           </>
+        )}
+
+        {activeTab === 'facilities' && (
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="p-4">
+              <h3 className="text-lg font-semibold">시설물 현황</h3>
+              <p>시설물 현황 내용을 여기에 추가하세요.</p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'manual' && (
+          <div className="bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="p-4">
+              <h3 className="text-lg font-semibold">매뉴얼</h3>
+              <p>매뉴얼 내용을 여기에 추가하세요.</p>
+            </div>
+          </div>
         )}
       </div>
     </div>
