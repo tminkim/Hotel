@@ -10,6 +10,8 @@ const ElectricalManagementApp = () => {
   const [distributionBoards, setDistributionBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
+  const [initialZoom, setInitialZoom] = useState(1);
+  const [minZoom, setMinZoom] = useState(1);
 
   const fetchCSVData = useCallback(async () => {
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
@@ -100,6 +102,21 @@ const ElectricalManagementApp = () => {
     return { x: x / 10, y: y / 10 };
   };
 
+  const handleImageLoad = (e) => {
+    const img = e.target;
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
+    const containerWidth = img.parentElement.clientWidth;
+    const containerHeight = img.parentElement.clientHeight;
+
+    const widthRatio = containerWidth / imgWidth;
+    const heightRatio = containerHeight / imgHeight;
+    const newInitialZoom = Math.min(widthRatio, heightRatio);
+
+    setInitialZoom(newInitialZoom);
+    setMinZoom(newInitialZoom);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
@@ -168,19 +185,26 @@ const ElectricalManagementApp = () => {
             </div>
 
             {selectedFloorPlan && (
-              <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
-                <div className="relative">
+              <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4" style={{ width: '100%' }}>
+                <div className="relative w-full h-full">
                   <PanZoom
                     enablePan={true}
                     enableZoom={true}
-                    zoomSpeed={1.2}
-                    autoCenter={true}
-                    autoCenterZoomLevel={1}
-                    minZoom={1}
+                    zoomSpeed={0.4}
+                    autoCenter={false}
+                    minZoom={minZoom}
                     maxZoom={4}
                     style={{ touchAction: 'none' }}
+                    initialZoom={initialZoom}
+                    initialX={0}
+                    initialY={0}
                   >
-                    <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
+                    <img
+                      src={selectedFloorPlan}
+                      alt="Floor Plan"
+                      className="w-full h-full object-contain"
+                      onLoad={handleImageLoad}
+                    />
                     {filteredBoards.map((board, index) => {
                       const { x, y } = getMarkerPosition(board['장소']);
                       return (
