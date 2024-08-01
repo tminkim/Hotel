@@ -122,9 +122,9 @@ const ElectricalManagementApp = () => {
         {activeTab === 'distributionBoard' && (
           <>
             <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4 p-4">
-              <div className="flex flex-wrap md:flex-nowrap items-center -mx-2 mb-4">
+              <div className="flex flex-wrap md:flex-nowrap items-center -mx-2 mb-4 space-y-2 md:space-y-0">
                 <select
-                  className="flex-grow w-full mb-4 md:mb-0 md:mr-2 p-2 border rounded"
+                  className="flex-grow w-full md:w-auto md:mr-2 p-2 border rounded"
                   value={floor}
                   onChange={(e) => setFloor(e.target.value)}
                 >
@@ -135,7 +135,7 @@ const ElectricalManagementApp = () => {
                 </select>
                 <input
                   type="text"
-                  className="flex-grow w-full mb-4 md:mb-0 md:mr-2 p-2 border rounded"
+                  className="flex-grow w-full md:w-auto md:mr-2 p-2 border rounded"
                   placeholder="검색어 입력"
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
