@@ -184,35 +184,46 @@ const ElectricalManagementApp = () => {
             {selectedFloorPlan && (
               <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4" style={{ width: '100%' }}>
                 <div className="relative w-full h-full">
-                  <TransformWrapper
-                    initialScale={initialScale}
-                    minScale={initialScale}
-                    doubleClick={{ disabled: true }}
-                    panning={{ excluded: ['input', 'select', 'button'] }}
-                    wheel={{ step: 0.1 }}
-                    pinch={{ step: 5 }}
-                    zoomAnimation={{ animationTime: 0.2 }}
-                  >
-                    <TransformComponent>
-                      <img
-                        src={selectedFloorPlan}
-                        alt="Floor Plan"
-                        className="w-full h-full object-contain"
-                        onLoad={handleImageLoad}
-                      />
-                      {filteredBoards.map((board, index) => {
-                        const { x, y } = getMarkerPosition(board['장소']);
-                        return (
-                          <div
-                            key={index}
-                            className="absolute w-3 h-3 bg-red-500 rounded-full"
-                            style={{ left: `${x}%`, top: `${y}%` }}
-                            title={board['분전반 명칭']}
-                          ></div>
-                        );
-                      })}
-                    </TransformComponent>
-                  </TransformWrapper>
+                <TransformWrapper
+                  initialScale={initialScale}
+                  minScale={1}
+                  centerZoomedOut={true}
+                  doubleClick={{ disabled: true }}
+                  panning={{ excluded: ['input', 'select', 'button'] }}
+                  wheel={{ step: 0.02 }} // 확대/축소 속도 조절
+                  pinch={{ step: 0.02 }} // 확대/축소 속도 조절
+                  zoomAnimation={{ animationTime: 0.5 }} // 확대/축소 애니메이션 설정
+                  onZoomStop={({ state, instance }) => {
+                    if (state.scale < initialScale) {
+                      instance.resetTransform(initialScale);
+                    }
+                  }}
+                  onZoomChange={({ state, instance }) => {
+                    if (state.scale < initialScale) {
+                      instance.resetTransform(initialScale);
+                    }
+                  }}
+                >
+                  <TransformComponent>
+                    <img
+                      src={selectedFloorPlan}
+                      alt="Floor Plan"
+                      className="w-full h-full object-contain"
+                      onLoad={handleImageLoad}
+                    />
+                    {filteredBoards.map((board, index) => {
+                      const { x, y } = getMarkerPosition(board['장소']);
+                      return (
+                        <div
+                          key={index}
+                          className="absolute w-3 h-3 bg-red-500 rounded-full"
+                          style={{ left: `${x}%`, top: `${y}%` }}
+                          title={board['분전반 명칭']}
+                        ></div>
+                      );
+                    })}
+                  </TransformComponent>
+                </TransformWrapper>
                 </div>
               </div>
             )}
