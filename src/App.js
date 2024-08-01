@@ -115,17 +115,6 @@ const ElectricalManagementApp = () => {
     setInitialScale(newInitialScale);
   };
 
-  const transformOptions = {
-    limitToBounds: true,
-    minScale: 1,
-    centerZoomedOut: true,
-    doubleClick: { disabled: true },
-    panning: { excluded: ['input', 'select', 'button'] },
-    wheel: { step: 0.02 },
-    pinch: { step: 0.02 },
-    zoomAnimation: { animationTime: 0.5, animationType: 'ease-in-out' }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
