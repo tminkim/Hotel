@@ -124,7 +124,7 @@ const ElectricalManagementApp = () => {
                 <div className="flex flex-wrap -mx-2 mb-4">
                   <div className="flex w-full mb-4">
                     <select
-                      className="w-1/3 mr-2 p-2 border rounded"
+                      className="w-1/2 sm:w-1/3 mr-2 p-2 border rounded"
                       value={floor}
                       onChange={(e) => setFloor(e.target.value)}
                     >
