@@ -143,7 +143,7 @@ const ElectricalManagementApp = () => {
                       onChange={(e) => setSearchText(e.target.value)}
                     />
                     <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded-r flex items-center"
+                      className="bg-blue-500 text-white px-4 py-2 rounded-r flex-shrink-0"
                       onClick={handleSearch}
                     >
                       <Search size={20} />
