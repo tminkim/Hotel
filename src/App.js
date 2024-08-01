@@ -186,26 +186,21 @@ const ElectricalManagementApp = () => {
                 <div className="relative w-full h-full">
                 <TransformWrapper
                   initialScale={initialScale}
-                  minScale={1}  // 최소 스케일을 1로 설정
+                  minScale={1}
                   centerZoomedOut={true}
                   doubleClick={{ disabled: true }}
                   panning={{ excluded: ['input', 'select', 'button'] }}
-                  wheel={{ step: 0.02, smoothStep: 0.01 }} // 확대/축소 속도 및 부드럽게 조정
-                  pinch={{ step: 0.02 }} // 핀치 확대/축소 속도 조정
+                  wheel={{ step: 0.02 }}
+                  pinch={{ step: 0.02 }}
                   zoomAnimation={{ animationTime: 0.5, animationType: 'ease-in-out' }}
                   onZoomStop={({ state, instance }) => {
                     if (state.scale < 1) {
                       instance.resetTransform(1);
                     }
                   }}
-                  onPinchStop={({ state, instance }) => {
-                    if (state.scale < 1) {
-                      instance.resetTransform(1);
-                    }
-                  }}
-                  onZoomChange={({ state, instance }) => {
-                    if (state.scale < 1) {
-                      instance.resetTransform(1);
+                  onPinchStart={({ state, instance, event }) => {
+                    if (event.touches.length === 2) {
+                      instance.zoomToElement(event.target, state.scale);
                     }
                   }}
                 >
