@@ -124,7 +124,7 @@ const ElectricalManagementApp = () => {
                 <div className="flex flex-wrap -mx-2 mb-4">
                   <div className="flex w-full mb-4">
                     <select
-                      className="flex-grow mr-2 p-2 border rounded"
+                      className="w-1/4 mr-2 p-2 border rounded"
                       value={floor}
                       onChange={(e) => setFloor(e.target.value)}
                     >
@@ -135,8 +135,7 @@ const ElectricalManagementApp = () => {
                     </select>
                     <input
                       type="text"
-                      className="flex-grow-2 mr-2 p-2 border rounded"
-                      style={{ width: '40%' }}
+                      className="flex-grow mr-2 p-2 border rounded"
                       placeholder="검색어 입력"
                       value={searchText}
                       onChange={(e) => setSearchText(e.target.value)}
