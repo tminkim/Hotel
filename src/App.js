@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Modal from 'react-modal';
 import { Search } from 'lucide-react';
+import './styles.css';  // CSS 파일을 임포트합니다.
 
 const ElectricalManagementApp = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
@@ -9,6 +11,10 @@ const ElectricalManagementApp = () => {
   const [distributionBoards, setDistributionBoards] = useState([]);
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
+  const [searchPerformed, setSearchPerformed] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [showLoadList, setShowLoadList] = useState(false);
 
   const fetchCSVData = useCallback(async () => {
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
@@ -83,6 +89,7 @@ const ElectricalManagementApp = () => {
     }
 
     setFilteredBoards(results);
+    setSearchPerformed(true);
   }, [filterType, floor, searchText, distributionBoards]);
 
   useEffect(() => {
@@ -97,6 +104,18 @@ const ElectricalManagementApp = () => {
     if (!location) return { x: 0, y: 0 };
     const [x, y] = location.split('-').slice(1).map(Number);
     return { x: x / 10, y: y / 10 };
+  };
+
+  const openModal = (board) => {
+    setSelectedBoard(board);
+    setShowLoadList(false);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedBoard(null);
+    setShowLoadList(false);
   };
 
   return (
@@ -124,7 +143,7 @@ const ElectricalManagementApp = () => {
                 <div className="flex flex-wrap -mx-2 mb-4">
                   <div className="flex w-full mb-4">
                     <select
-                      className="w-1/2 sm:w-1/3 mr-2 p-2 border rounded"
+                      className="flex-grow mr-2 p-2 border rounded"
                       value={floor}
                       onChange={(e) => setFloor(e.target.value)}
                     >
@@ -135,7 +154,8 @@ const ElectricalManagementApp = () => {
                     </select>
                     <input
                       type="text"
-                      className="flex-grow mr-2 p-2 border rounded"
+                      className="flex-grow-2 mr-2 p-2 border rounded"
+                      style={{ width: '40%' }}
                       placeholder="검색어 입력"
                       value={searchText}
                       onChange={(e) => setSearchText(e.target.value)}
@@ -176,6 +196,7 @@ const ElectricalManagementApp = () => {
                         className="absolute w-3 h-3 bg-red-500 rounded-full"
                         style={{ left: `${x}%`, top: `${y}%` }}
                         title={board['분전반 명칭']}
+                        onClick={() => openModal(board)}
                       ></div>
                     );
                   })}
@@ -183,27 +204,23 @@ const ElectricalManagementApp = () => {
               </div>
             )}
 
-            {filteredBoards.length > 0 && (
+            {searchPerformed && filteredBoards.length > 0 && (
               <div className="bg-white shadow-md rounded-lg overflow-hidden">
                 <div className="p-4">
                   <h3 className="text-lg font-semibold mb-4">검색 결과</h3>
-                  {filteredBoards.map((board, index) => (
-                    <div key={index} className="mb-4 last:mb-0 p-3 bg-gray-50 rounded">
-                      <h4 className="font-medium">{board['분전반 명칭']}</h4>
-                      <p className="text-sm text-gray-600">층: {board['층']}</p>
-                      <p className="text-sm text-gray-600">용도: {board['용도']}</p>
-                      <p className="text-sm text-gray-600">전압: {board['전압']}</p>
-                      <p className="text-sm text-gray-600">MAIN 차단기: {board['MAIN 차단기']}</p>
-                      <details>
-                        <summary className="text-sm text-blue-500 cursor-pointer">분기 정보</summary>
-                        <ul className="mt-2 pl-4 text-sm">
-                          {board['분기'] && board['분기'].map((branch, i) => (
-                            <li key={i}>{branch}</li>
-                          ))}
-                        </ul>
-                      </details>
-                    </div>
-                  ))}
+                  <div className="space-y-2">
+                    {filteredBoards.map((board, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center p-3 bg-gray-50 rounded"
+                        onClick={() => openModal(board)}
+                      >
+                        <div className="w-1/2 font-medium">{board['분전반 명칭']}</div>
+                        <div className="w-1/4 text-gray-600">{board['용도']}</div>
+                        <div className="w-1/4 text-gray-600">{board['전압']}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -228,6 +245,66 @@ const ElectricalManagementApp = () => {
           </div>
         )}
       </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Board Details"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        {selectedBoard && (
+          <div className="relative">
+            <button onClick={closeModal} className="close-button">X</button>
+            <h2 className="text-lg font-bold mb-4">{selectedBoard['분전반 명칭']}</h2>
+            <img src={`/images/${selectedBoard['층']}.jpg`} alt="Floor Plan" className="w-full h-auto mb-4" />
+            <table className="w-full mb-4 table-auto border-collapse border border-gray-300">
+              <tbody>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">층</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['층']}</td>
+                  <td className="font-bold p-2 border border-gray-300">설치형태</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['설치형태']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">용도</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['용도']}</td>
+                  <td className="font-bold p-2 border border-gray-300">전압</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['전압']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">MAIN 차단기</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['MAIN 차단기']}</td>
+                  <td className="font-bold p-2 border border-gray-300">간선 SQ</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['간선 SQ']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">비고</td>
+                  <td className="p-2 border border-gray-300" colSpan="3">{selectedBoard['비고']}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button
+              onClick={() => setShowLoadList(!showLoadList)}
+              className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+            >
+              부하 리스트 보기
+            </button>
+            {showLoadList && (
+              <div className="bg-gray-100 p-4 rounded">
+                <h3 className="font-bold mb-2">부하 리스트</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {selectedBoard['분기'].map((load, index) => (
+                    <div key={index} className="bg-white p-2 border rounded shadow-sm">
+                      {load}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };
