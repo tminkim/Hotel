@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import PanZoom from 'react-easy-panzoom';
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 
 const ElectricalManagementApp = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
@@ -170,7 +171,7 @@ const ElectricalManagementApp = () => {
             {selectedFloorPlan && (
               <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
                 <div className="relative">
-                  <PanZoom>
+                  <Zoom>
                     <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
                     {filteredBoards.map((board, index) => {
                       const { x, y } = getMarkerPosition(board['장소']);
@@ -183,7 +184,7 @@ const ElectricalManagementApp = () => {
                         ></div>
                       );
                     })}
-                  </PanZoom>
+                  </Zoom>
                 </div>
               </div>
             )}

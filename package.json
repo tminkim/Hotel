@@ -16,6 +16,7 @@
     "react-easy-panzoom": "^0.4.4",
     "react-leaflet": "^4.2.1",
     "react-medium-image-zoom": "^5.2.8",
+    "react-pinch-zoom": "^0.1.4",
     "react-pinch-zoom-pan": "^1.4.5",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
