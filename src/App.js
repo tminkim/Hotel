@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
-import { PinchView } from 'react-pinch-zoom-pan';
+import PanZoom from 'react-easy-panzoom';
 
 const ElectricalManagementApp = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
@@ -170,7 +170,7 @@ const ElectricalManagementApp = () => {
             {selectedFloorPlan && (
               <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
                 <div className="relative">
-                  <PinchView backgroundColor="white" maxScale={4} containerRatio={1}>
+                  <PanZoom>
                     <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
                     {filteredBoards.map((board, index) => {
                       const { x, y } = getMarkerPosition(board['장소']);
@@ -183,7 +183,7 @@ const ElectricalManagementApp = () => {
                         ></div>
                       );
                     })}
-                  </PinchView>
+                  </PanZoom>
                 </div>
               </div>
             )}
