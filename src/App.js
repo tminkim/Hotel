@@ -125,7 +125,7 @@ const ElectricalManagementApp = () => {
               <div className="p-4">
                 <div className="flex flex-wrap -mx-2 mb-4 space-y-2 md:space-y-0 md:space-x-2">
                   <select
-                    className="flex-grow p-2 border rounded"
+                    className="flex-grow p-2 border rounded md:w-1/4"
                     value={floor}
                     onChange={(e) => setFloor(e.target.value)}
                   >
@@ -136,13 +136,13 @@ const ElectricalManagementApp = () => {
                   </select>
                   <input
                     type="text"
-                    className="flex-grow p-2 border rounded"
+                    className="flex-grow p-2 border rounded md:w-2/4"
                     placeholder="검색어 입력"
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                   />
                   <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded flex-shrink-0"
+                    className="bg-blue-500 text-white px-4 py-2 rounded flex-shrink-0 md:w-1/4"
                     onClick={handleSearch}
                   >
                     <Search size={20} />
