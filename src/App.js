@@ -12,6 +12,7 @@ const ElectricalManagementApp = () => {
   const [filteredBoards, setFilteredBoards] = useState([]);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [showLoadList, setShowLoadList] = useState(false);
@@ -90,6 +91,7 @@ const ElectricalManagementApp = () => {
 
     setFilteredBoards(results);
     setSearchPerformed(true);
+    setSelectedLocation(null);
   }, [filterType, floor, searchText, distributionBoards]);
 
   useEffect(() => {
@@ -104,6 +106,18 @@ const ElectricalManagementApp = () => {
     if (!location) return { x: 0, y: 0 };
     const [x, y] = location.split('-').slice(1).map(Number);
     return { x: x / 10, y: y / 10 };
+  };
+
+  const handleMarkerClick = (location) => {
+    if (selectedLocation === location) {
+      setFilteredBoards(distributionBoards);
+      setSelectedLocation(null);
+    } else {
+      const results = distributionBoards.filter(board => board['장소'] === location);
+      setFilteredBoards(results);
+      setSelectedLocation(location);
+    }
+    setSearchPerformed(true);
   };
 
   const openModal = (board) => {
@@ -188,15 +202,15 @@ const ElectricalManagementApp = () => {
               <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
                 <div className="relative">
                   <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
-                  {filteredBoards.map((board, index) => {
+                  {distributionBoards.filter(board => board['층'] === floor).map((board, index) => {
                     const { x, y } = getMarkerPosition(board['장소']);
                     return (
                       <div
                         key={index}
-                        className="absolute w-3 h-3 bg-red-500 rounded-full"
+                        className={`absolute w-3 h-3 rounded-full ${selectedLocation === board['장소'] ? 'bg-green-500' : 'bg-red-500'}`}
                         style={{ left: `${x}%`, top: `${y}%` }}
                         title={board['분전반 명칭']}
-                        onClick={() => openModal(board)}
+                        onClick={() => handleMarkerClick(board['장소'])}
                       ></div>
                     );
                   })}
@@ -257,7 +271,14 @@ const ElectricalManagementApp = () => {
           <div className="relative">
             <button onClick={closeModal} className="close-button">X</button>
             <h2 className="text-lg font-bold mb-4">{selectedBoard['분전반 명칭']}</h2>
-            <img src={`/images/${selectedBoard['층']}.jpg`} alt="Floor Plan" className="w-full h-auto mb-4" />
+            <div className="relative mb-4">
+              <img src={`/images/${selectedBoard['층']}.jpg`} alt="Floor Plan" className="w-full h-auto" />
+              <div
+                className="absolute w-3 h-3 bg-red-500 rounded-full"
+                style={{ left: `${getMarkerPosition(selectedBoard['장소']).x}%`, top: `${getMarkerPosition(selectedBoard['장소']).y}%` }}
+                title={selectedBoard['분전반 명칭']}
+              ></div>
+            </div>
             <table className="w-full mb-4 table-auto border-collapse border border-gray-300">
               <tbody>
                 <tr className="border border-gray-300">
