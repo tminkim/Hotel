@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Modal from 'react-modal';
 import { Search } from 'lucide-react';
 import '../styles.css';
@@ -15,6 +15,7 @@ const DistributionBoard = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [showLoadList, setShowLoadList] = useState(false);
+  const loadListRef = useRef(null);
 
   const fetchCSVData = useCallback(async () => {
     const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
@@ -109,7 +110,7 @@ const DistributionBoard = () => {
 
   const handleMarkerClick = (location) => {
     if (selectedLocation === location) {
-      setFilteredBoards(distributionBoards);
+      handleSearch();
       setSelectedLocation(null);
     } else {
       const results = distributionBoards.filter(board => board['장소'] === location);
@@ -129,6 +130,17 @@ const DistributionBoard = () => {
     setModalIsOpen(false);
     setSelectedBoard(null);
     setShowLoadList(false);
+  };
+
+  const toggleLoadList = () => {
+    setShowLoadList(!showLoadList);
+    if (!showLoadList) {
+      setTimeout(() => {
+        if (loadListRef.current) {
+          loadListRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+    }
   };
 
   return (
@@ -183,7 +195,7 @@ const DistributionBoard = () => {
         <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
           <div className="relative">
             <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
-            {distributionBoards.filter(board => board['층'] === floor).map((board, index) => {
+            {filteredBoards.map((board, index) => {
               const { x, y } = getMarkerPosition(board['장소']);
               return (
                 <div
@@ -278,13 +290,13 @@ const DistributionBoard = () => {
               </tbody>
             </table>
             <button
-              onClick={() => setShowLoadList(!showLoadList)}
+              onClick={toggleLoadList}
               className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
             >
               부하 리스트 보기
             </button>
             {showLoadList && (
-              <div className="bg-gray-100 p-4 rounded">
+              <div className="bg-gray-100 p-4 rounded" ref={loadListRef}>
                 <h3 className="font-bold mb-2">부하 리스트</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {selectedBoard['분기'].map((load, index) => (
