@@ -76,3 +76,37 @@
 .close-button:focus {
   outline: none;
 }
+
+/* 시설물 버튼 스타일 */
+.facility-button {
+  flex: 1;
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0.25rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 클릭된 버튼 스타일 */
+.bg-blue-500 {
+  background-color: #3498db;
+  color: white;
+}
+
+/* 클릭되지 않은 버튼 스타일 */
+.bg-gray-200 {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+}
+
+/* 시설물 상세 정보 스타일 */
+.facility-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  background: #f9f9f9;
+}
