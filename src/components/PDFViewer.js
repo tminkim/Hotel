@@ -6,7 +6,11 @@ const PDFViewer = ({ file }) => {
     return (
         <div style={{ height: '750px' }}>
             <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
-                <Viewer fileUrl={file} />
+                <Viewer
+                    fileUrl={file}
+                    defaultScale={1.5} // 기본 배율을 높여서 렌더링
+                    renderingIntent="print" // 인쇄 품질로 렌더링
+                />
             </Worker>
         </div>
     );
