@@ -4,12 +4,11 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 
 const PDFViewer = ({ file }) => {
     return (
-        <div style={{ height: '750px' }}>
+        <div className="pdf-viewer-container">
             <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
                 <Viewer
                     fileUrl={file}
-                    defaultScale={1.5} // 기본 배율을 높여서 렌더링
-                    renderingIntent="print" // 인쇄 품질로 렌더링
+                    initialPage={1} // PDF 파일의 첫 번째 페이지로 초기화
                 />
             </Worker>
         </div>
