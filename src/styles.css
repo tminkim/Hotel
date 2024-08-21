@@ -110,3 +110,22 @@
   border-radius: 0.5rem;
   background: #f9f9f9;
 }
+
+.pdf-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.pdf-file-list {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.pdf-viewer {
+  flex: 2;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  background: #fff;
+}
