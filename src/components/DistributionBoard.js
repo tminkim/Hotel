@@ -150,15 +150,15 @@ const DistributionBoard = () => {
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="flex w-full mb-4">
               <select
-                className="flex-grow mr-2 p-2 border rounded"
+                className="distribution-dropdown flex-grow mr-2 p-2 border rounded"
                 value={floor}
                 onChange={(e) => setFloor(e.target.value)}
-              >
+            >
                 <option value="">전체 층</option>
                 {[...new Set(distributionBoards.map(board => board['층']))].map(floorOption => (
-                  <option key={floorOption} value={floorOption}>{floorOption}</option>
+                    <option key={floorOption} value={floorOption}>{floorOption}</option>
                 ))}
-              </select>
+            </select>
               <input
                 type="text"
                 className="flex-grow-2 mr-2 p-2 border rounded"
