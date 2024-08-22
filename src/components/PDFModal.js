@@ -8,7 +8,7 @@ const PDFModal = ({ isOpen, onRequestClose, file }) => {
             isOpen={isOpen}
             onRequestClose={onRequestClose}
             contentLabel="PDF Viewer"
-            className="pdf-modal"
+            className="pdf-fullscreen-modal"
             overlayClassName="overlay"
         >
             <button className="close-button" onClick={onRequestClose}>X</button>

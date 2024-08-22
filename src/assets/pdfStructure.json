@@ -3,6 +3,10 @@
       {
         "folderName": "변전실",
         "files": ["01.pdf"]
-      }      
+      },
+      {
+        "folderName": "객실",
+        "files": ["02.pdf"]
+      }  
     ]
   }
