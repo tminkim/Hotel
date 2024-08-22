@@ -240,76 +240,74 @@ const DistributionBoard = () => {
         overlayClassName="overlay"
       >
         {selectedBoard && (
-          <>
-            <button onClick={closeModal} className="close-button">X</button> {/* 모달 바깥에 닫기 버튼 */}
-            <div className="modal-content">
-              <h2 className="text-lg font-bold mb-4">{selectedBoard['분전반 명칭']}</h2>
-              <div className="relative mb-4">
-                <img src={`/images/${selectedBoard['층']}.jpg`} alt="Floor Plan" className="w-full h-auto" />
-                <div
-                  className="absolute w-2 h-2 bg-red-500 rounded-full"
-                  style={{ left: `${getMarkerPosition(selectedBoard['장소']).x}%`, top: `${getMarkerPosition(selectedBoard['장소']).y}%` }}
-                  title={selectedBoard['분전반 명칭']}
-                ></div>
-              </div>
-              <table className="w-full mb-4 table-auto border-collapse border border-gray-300">
-                <tbody>
-                  <tr className="border border-gray-300">
-                    <td className="font-bold p-2 border border-gray-300">층</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['층']}</td>
-                    <td className="font-bold p-2 border border-gray-300">설치형태</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['설치형태']}</td>
-                  </tr>
-                  <tr className="border border-gray-300">
-                    <td className="font-bold p-2 border border-gray-300">용도</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['용도']}</td>
-                    <td className="font-bold p-2 border border-gray-300">전압</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['전압']}</td>
-                  </tr>
-                  <tr className="border border-gray-300">
-                    <td className="font-bold p-2 border border-gray-300">MAIN 차단기</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['MAIN 차단기']}</td>
-                    <td className="font-bold p-2 border border-gray-300">간선 SQ</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['간선 SQ']}</td>
-                  </tr>
-                  <tr className="border border-gray-300">
-                    <td className="font-bold p-2 border border-gray-300">TR명</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['TR명']}</td>
-                    <td className="font-bold p-2 border border-gray-300">면수</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['면수']}</td>
-                  </tr>
-                  <tr className="border border-gray-300">
-                    <td className="font-bold p-2 border border-gray-300">FEEDER명</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['FEEDER명']}</td>
-                    <td className="font-bold p-2 border border-gray-300">2차분기판넬</td>
-                    <td className="p-2 border border-gray-300">{selectedBoard['2차분기판넬']}</td>
-                  </tr>
-                  <tr className="border border-gray-300">
-                    <td className="font-bold p-2 border border-gray-300">비고</td>
-                    <td className="p-2 border border-gray-300" colSpan="3">{selectedBoard['비고']}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <button
-                onClick={toggleLoadList}
-                className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-              >
-                부하 리스트 보기
-              </button>
-              {showLoadList && (
-                <div className="bg-gray-100 p-4 rounded" ref={loadListRef}>
-                  <h3 className="font-bold mb-2">부하 리스트</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {selectedBoard['분기'].map((load, index) => (
-                      <div key={index} className="bg-white p-2 border rounded shadow-sm">
-                        {load}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+          <div className="relative max-h-screen p-4 overflow-y-auto">
+            <button onClick={closeModal} className="close-button fixed top-0 right-0 m-4">X</button>
+            <h2 className="text-lg font-bold mb-4">{selectedBoard['분전반 명칭']}</h2>
+            <div className="relative mb-4">
+              <img src={`/images/${selectedBoard['층']}.jpg`} alt="Floor Plan" className="w-full h-auto" />
+              <div
+                className="absolute w-2 h-2 bg-red-500 rounded-full"
+                style={{ left: `${getMarkerPosition(selectedBoard['장소']).x}%`, top: `${getMarkerPosition(selectedBoard['장소']).y}%` }}
+                title={selectedBoard['분전반 명칭']}
+              ></div>
             </div>
-          </>
+            <table className="w-full mb-4 table-auto border-collapse border border-gray-300">
+              <tbody>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">층</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['층']}</td>
+                  <td className="font-bold p-2 border border-gray-300">설치형태</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['설치형태']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">용도</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['용도']}</td>
+                  <td className="font-bold p-2 border border-gray-300">전압</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['전압']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">MAIN 차단기</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['MAIN 차단기']}</td>
+                  <td className="font-bold p-2 border border-gray-300">간선 SQ</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['간선 SQ']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">TR명</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['TR명']}</td>
+                  <td className="font-bold p-2 border border-gray-300">면수</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['면수']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">FEEDER명</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['FEEDER명']}</td>
+                  <td className="font-bold p-2 border border-gray-300">2차분기판넬</td>
+                  <td className="p-2 border border-gray-300">{selectedBoard['2차분기판넬']}</td>
+                </tr>
+                <tr className="border border-gray-300">
+                  <td className="font-bold p-2 border border-gray-300">비고</td>
+                  <td className="p-2 border border-gray-300" colSpan="3">{selectedBoard['비고']}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button
+              onClick={toggleLoadList}
+              className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+            >
+              부하 리스트 보기
+            </button>
+            {showLoadList && (
+              <div className="bg-gray-100 p-4 rounded" ref={loadListRef}>
+                <h3 className="font-bold mb-2">부하 리스트</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {selectedBoard['분기'].map((load, index) => (
+                    <div key={index} className="bg-white p-2 border rounded shadow-sm">
+                      {load}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </Modal>
     </>

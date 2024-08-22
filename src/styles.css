@@ -66,29 +66,6 @@
     background: #2980b9;
   }
   
-  /* Modal 컨텐츠 스타일 */
-  .modal-content {
-    padding: 20px;
-    overflow-y: auto;
-    max-height: 80vh;
-  }
-  
-  /* 테이블 스타일 */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  table, th, td {
-    border: 1px solid #ddd;
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: left;
-  }
-  
   /* PDF 뷰어 컨테이너 스타일 */
   .pdf-viewer-container {
     flex: 1;
@@ -114,5 +91,45 @@
     .flex-grow-2 {
       width: 100%;
     }
+  }
+  
+  /* 매뉴얼 폴더 버튼 스타일 */
+  .manual-folder-button {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+  }
+  
+  .manual-folder-button.bg-blue-600 {
+    background-color: #1d72b8;
+    color: white;
+  }
+  
+  /* 매뉴얼 드롭다운 스타일 */
+  .manual-dropdown-container {
+    margin-top: 1rem;
+  }
+  
+  /* 매뉴얼 드롭다운 */
+  .manual-dropdown {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    margin-bottom: 1rem;
+  }
+  
+  /* 시설물 버튼 스타일 */
+  .facility-button {
+    flex: 1;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0.25rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
