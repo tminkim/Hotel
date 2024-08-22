@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import PDFModal from './PDFModal';
+import Modal from 'react-modal';
+import '../styles.css';
 import pdfStructure from '../assets/pdfStructure.json';
 
 const Manual = () => {
@@ -23,14 +24,14 @@ const Manual = () => {
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="manual-container bg-white shadow-md rounded-lg overflow-hidden">
             <div className="p-4">
                 <h3 className="text-lg font-semibold mb-4">매뉴얼</h3>
-                <div className="flex flex-wrap -mx-2">
+                <div className="manual-folder-grid flex flex-wrap -mx-2">
                     {pdfStructure.folders.map(folder => (
                         <div key={folder.folderName} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                             <button
-                                className={`w-full py-2 px-4 font-medium rounded mb-2 ${
+                                className={`manual-folder-button w-full py-2 px-4 font-medium rounded mb-2 ${
                                     selectedFolder === folder.folderName 
                                         ? 'bg-blue-600 text-white' 
                                         : 'bg-gray-200 text-gray-700'
@@ -44,7 +45,7 @@ const Manual = () => {
                 </div>
 
                 {selectedFolder && (
-                    <div className="mt-4">
+                    <div className="manual-dropdown-container mt-4">
                         <select
                             className="manual-dropdown w-full p-2 border rounded"
                             onChange={(e) => openModal(e.target.value)}
@@ -63,11 +64,20 @@ const Manual = () => {
                     </div>
                 )}
 
-                <PDFModal
+                <Modal
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}
-                    file={selectedFile}
-                />
+                    contentLabel="PDF Viewer"
+                    className="pdf-fullscreen-modal"
+                    overlayClassName="overlay"
+                >
+                    <button onClick={closeModal} className="close-button">X</button>
+                    <div className="pdf-viewer-container">
+                        {selectedFile && (
+                            <embed src={selectedFile} type="application/pdf" width="100%" height="100%" />
+                        )}
+                    </div>
+                </Modal>
             </div>
         </div>
     );
