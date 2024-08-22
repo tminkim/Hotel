@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Modal from 'react-modal';
-import '../styles.css';
+import PDFModal from './PDFModal';
 import pdfStructure from '../assets/pdfStructure.json';
 
 const Manual = () => {
@@ -24,19 +23,20 @@ const Manual = () => {
     };
 
     return (
-        <div className="manual-container bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <div className="p-4">
                 <h3 className="text-lg font-semibold mb-4">매뉴얼</h3>
-                <div className="manual-folder-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
+                <div className="flex flex-wrap" style={{ justifyContent: 'flex-start', gap: '1rem' }}>
                     {pdfStructure.folders.map(folder => (
                         <div key={folder.folderName} style={{ flex: '1 1 calc(33.333% - 1rem)', maxWidth: 'calc(33.333% - 1rem)', marginBottom: '1rem' }}>
                             <button
-                                className={`manual-folder-button w-full py-2 px-4 font-medium rounded mb-2 ${
+                                className={`w-full py-2 px-4 font-medium rounded ${
                                     selectedFolder === folder.folderName 
-                                    ? 'bg-blue-600 text-white' 
-                                    : 'bg-gray-200 text-gray-700'
+                                        ? 'bg-[#2566e8] text-white' // 클릭 시 색상
+                                        : 'bg-[#3498db] text-white hover:bg-[#2566e8]' // 기본 및 호버 색상
                                 }`}
                                 onClick={() => handleFolderClick(folder.folderName)}
+                                style={{ transition: 'background-color 0.3s ease, color 0.3s ease' }}
                             >
                                 {folder.folderName}
                             </button>
@@ -45,7 +45,7 @@ const Manual = () => {
                 </div>
 
                 {selectedFolder && (
-                    <div className="manual-dropdown-container mt-4">
+                    <div className="mt-4">
                         <select
                             className="manual-dropdown w-full p-2 border rounded"
                             onChange={(e) => openModal(e.target.value)}
@@ -64,22 +64,11 @@ const Manual = () => {
                     </div>
                 )}
 
-                <Modal
+                <PDFModal
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}
-                    contentLabel="PDF Viewer"
-                    className="pdf-fullscreen-modal"
-                    overlayClassName="overlay"
-                >
-                    <button onClick={closeModal} className="close-button">X</button>
-                    <div className="pdf-viewer-container">
-                        {selectedFile && (
-                            <object data={selectedFile} type="application/pdf" width="100%" height="100%">
-                                <p>PDF를 보려면 <a href={selectedFile}>여기</a>를 클릭하세요.</p>
-                            </object>
-                        )}
-                    </div>
-                </Modal>
+                    file={selectedFile}
+                />
             </div>
         </div>
     );
