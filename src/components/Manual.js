@@ -28,7 +28,7 @@ const Manual = () => {
             <div className="p-4">
                 <h3 className="text-lg font-semibold mb-4">매뉴얼</h3>
                 <div className="manual-folder-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
-                    {pdfStructure.folders.map((folder, index) => (
+                    {pdfStructure.folders.map(folder => (
                         <div key={folder.folderName} style={{ flex: '1 1 calc(33.333% - 1rem)', maxWidth: 'calc(33.333% - 1rem)', marginBottom: '1rem' }}>
                             <button
                                 className={`manual-folder-button w-full py-2 px-4 font-medium rounded mb-2 ${
@@ -74,7 +74,9 @@ const Manual = () => {
                     <button onClick={closeModal} className="close-button">X</button>
                     <div className="pdf-viewer-container">
                         {selectedFile && (
-                            <embed src={selectedFile} type="application/pdf" width="100%" height="100%" />
+                            <object data={selectedFile} type="application/pdf" width="100%" height="100%">
+                                <p>PDF를 보려면 <a href={selectedFile}>여기</a>를 클릭하세요.</p>
+                            </object>
                         )}
                     </div>
                 </Modal>
