@@ -13,15 +13,18 @@ const Facilities = () => {
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <div className="p-4">
-        <div className="flex flex-wrap -mx-1 mb-4">
+        <div className="facility-button-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: '1rem' }}>
           {facilitiesData.map(facility => (
-            <button
-              key={facility.id}
-              className={`facility-button ${selectedFacility && selectedFacility.id === facility.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-              onClick={() => setSelectedFacility(facility)}
-            >
-              {facility.name}
-            </button>
+            <div key={facility.id} style={{ flex: '1 1 calc(33.333% - 1rem)', maxWidth: 'calc(33.333% - 1rem)', marginBottom: '1rem' }}>
+              <button
+                className={`facility-button w-full py-2 px-4 font-medium rounded mb-2 ${
+                  selectedFacility && selectedFacility.id === facility.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                }`}
+                onClick={() => setSelectedFacility(facility)}
+              >
+                {facility.name}
+              </button>
+            </div>
           ))}
         </div>
         {selectedFacility && (

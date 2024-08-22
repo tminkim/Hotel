@@ -131,20 +131,32 @@
     background-color: #dcdcdc;
   }
   
-  /* 시설물 현황 및 매뉴얼 버튼 스타일 */
+  /* 매뉴얼 탭과 시설물 현황 탭의 버튼 컨테이너 스타일 */
+  .manual-folder-grid,
+  .facility-button-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* 버튼 간의 공간을 균등하게 분배 */
+    gap: 1rem; /* 버튼 간격 */
+    margin-bottom: 1rem;
+  }
+  
+  /* 자식 요소 버튼 스타일 */
   .manual-folder-button,
   .facility-button {
-    flex: 1;
+    flex: 1 1 calc(33.333% - 1rem); /* 각 버튼이 33.333%의 가로 공간을 차지 */
+    max-width: calc(33.333% - 1rem); /* 최대 폭 설정 */
     padding: 0.75rem;
     text-align: center;
     font-size: 1rem;
     font-weight: 500;
-    margin: 0.25rem;
+    margin: 0.5rem 0; /* 버튼 간의 여백 조정 */
     cursor: pointer;
     border-radius: 0.25rem;
     transition: background-color 0.3s ease, color 0.3s ease;
     background-color: #3498db;
     color: white;
+    box-sizing: border-box;
   }
   
   .manual-folder-button:hover,
@@ -152,32 +164,12 @@
     background-color: #2980b9;
   }
   
-  /* 반응형 디자인 - 모바일에서 가로 배치 유지 */
+  /* 반응형 디자인 */
   @media (max-width: 767px) {
-    /* 필드들이 가로로 배치되도록 유지 */
-    .flex.w-full {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  
-    .mr-2 {
-      margin-right: 0.5rem;
-      margin-bottom: 0;
-    }
-  
-    .flex-grow-2 {
-      width: auto;
-    }
-  
-    /* 버튼도 가로로 배치 유지 */
-    .manual-folder-grid {
-      flex-direction: row;
-    }
-  
     .manual-folder-button,
     .facility-button {
-      flex: 1 1 auto;
-      margin: 0.25rem;
+      flex: 1 1 100%; /* 작은 화면에서는 버튼이 전체 너비를 차지 */
+      max-width: 100%; /* 작은 화면에서의 최대 너비 설정 */
     }
   }
   
