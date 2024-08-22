@@ -25,27 +25,9 @@
     background-color: rgba(0, 0, 0, 0.75);
   }
   
-  /* 매뉴얼의 전체 화면 모달 스타일 */
-  .pdf-fullscreen-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: white;
-    padding: 0;
-    border-radius: 0;
-    outline: none;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  
   /* 닫기 버튼 스타일 */
   .close-button {
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 10px;
     background: #3498db;
@@ -66,50 +48,166 @@
     background: #2980b9;
   }
   
+  /* 공통 Flex 스타일 */
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  
+  .px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  
+  .mr-2 {
+    margin-right: 0.5rem;
+  }
+  
+  .mb-1 {
+    margin-bottom: 0.25rem;
+  }
+  
+  /* 드롭다운 및 검색 필드 스타일 */
+  select,
+  input {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+  }
+  
+  .flex-grow {
+    flex-grow: 1;
+  }
+  
+  .flex-grow-2 {
+    flex-grow: 2;
+    min-width: 40%; /* 검색어 입력 필드의 최소 폭 설정 */
+  }
+  
+  /* 버튼 스타일 */
+  button.bg-blue-500 {
+    background-color: #3498db;
+    color: white;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.bg-blue-500:hover {
+    background-color: #2980b9;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  /* 공통 버튼 스타일 */
+  button {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .bg-blue-500 {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .bg-gray-200 {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+  }
+  
+  .bg-gray-200:hover {
+    background-color: #dcdcdc;
+  }
+  
+  /* 시설물 현황 및 매뉴얼 버튼 스타일 */
+  .manual-folder-button,
+  .facility-button {
+    flex: 1;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0.25rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .manual-folder-button:hover,
+  .facility-button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* 반응형 디자인 - 모바일에서 가로 배치 유지 */
+  @media (max-width: 767px) {
+    /* 필드들이 가로로 배치되도록 유지 */
+    .flex.w-full {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  
+    .mr-2 {
+      margin-right: 0.5rem;
+      margin-bottom: 0;
+    }
+  
+    .flex-grow-2 {
+      width: auto;
+    }
+  
+    /* 버튼도 가로로 배치 유지 */
+    .manual-folder-grid {
+      flex-direction: row;
+    }
+  
+    .manual-folder-button,
+    .facility-button {
+      flex: 1 1 auto;
+      margin: 0.25rem;
+    }
+  }
+  
+  /* 테이블 스타일 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
   /* PDF 뷰어 컨테이너 스타일 */
   .pdf-viewer-container {
     flex: 1;
     overflow-y: auto;
   }
   
-  /* 모바일 최적화 반응형 스타일 */
-  @media (max-width: 767px) {
-    .modal-content {
-      max-height: 70vh;
-    }
-  
-    .flex {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  
-    .mr-2 {
-      margin-right: 0;
-      margin-bottom: 0.5rem;
-    }
-  
-    .flex-grow-2 {
-      width: 100%;
-    }
-  }
-  
-  /* 매뉴얼 폴더 버튼 스타일 */
-  .manual-folder-button {
-    background-color: #ecf0f1;
-    color: #2c3e50;
-  }
-  
-  .manual-folder-button.bg-blue-600 {
-    background-color: #1d72b8;
-    color: white;
-  }
-  
-  /* 매뉴얼 드롭다운 스타일 */
+  /* 매뉴얼 드롭다운 컨테이너 */
   .manual-dropdown-container {
     margin-top: 1rem;
   }
   
-  /* 매뉴얼 드롭다운 */
   .manual-dropdown {
     width: 100%;
     padding: 0.75rem;
@@ -118,18 +216,5 @@
     border-radius: 0.25rem;
     background-color: #fff;
     margin-bottom: 1rem;
-  }
-  
-  /* 시설물 버튼 스타일 */
-  .facility-button {
-    flex: 1;
-    padding: 0.75rem;
-    text-align: center;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin: 0.25rem;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
   

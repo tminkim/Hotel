@@ -30,19 +30,19 @@ const Manual = () => {
                 <div className="manual-folder-grid flex flex-wrap -mx-2">
                     {pdfStructure.folders.map(folder => (
                         <div key={folder.folderName} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
-                            <button
-                                className={`manual-folder-button w-full py-2 px-4 font-medium rounded mb-2 ${
-                                    selectedFolder === folder.folderName 
-                                        ? 'bg-blue-600 text-white' 
-                                        : 'bg-gray-200 text-gray-700'
-                                }`}
-                                onClick={() => handleFolderClick(folder.folderName)}
-                            >
-                                {folder.folderName}
-                            </button>
+                        <button
+                            className={`manual-folder-button w-full py-2 px-4 font-medium rounded mb-2 ${
+                            selectedFolder === folder.folderName 
+                                ? 'bg-blue-600 text-white' 
+                                : 'bg-gray-200 text-gray-700'
+                            }`}
+                            onClick={() => handleFolderClick(folder.folderName)}
+                        >
+                            {folder.folderName}
+                        </button>
                         </div>
                     ))}
-                </div>
+                    </div>
 
                 {selectedFolder && (
                     <div className="manual-dropdown-container mt-4">
