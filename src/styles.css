@@ -10,7 +10,8 @@
     outline: none;
     width: 80%;
     max-width: 800px;
-    max-height: 80%;
+    max-height: calc(100vh - 40px);
+    box-sizing: border-box;
 }
 
 .distribution-overlay {
@@ -50,7 +51,7 @@
 
 .load-list {
     max-height: 60vh; /* 부하 리스트의 최대 높이 설정 */
-    overflow: hidden; /* 부하 리스트에 스크롤이 생기지 않도록 설정 */
+    overflow: auto; /* 부하 리스트에 스크롤이 생기지 않도록 설정 */
     z-index: 1001; /* 모달창 안에서 부하 리스트가 표시되도록 설정 */
     position: relative;
 }
