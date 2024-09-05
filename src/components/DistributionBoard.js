@@ -299,14 +299,14 @@ const DistributionBoard = () => {
                                 부하 리스트 보기
                             </button>
                             {showLoadList && (
-                                <div className="bg-gray-100 p-4 rounded" ref={loadListRef}>
+                                <div className="bg-gray-100 p-4 rounded load-list" ref={loadListRef}>
                                     <h3 className="font-bold mb-2">부하 리스트</h3>
                                     <div className="grid grid-cols-2 gap-4">
                                         {selectedBoard['분기'].map((load, index) => (
                                             <div key={index} className="bg-white p-2 border rounded shadow-sm">
-                                                {load}
-                                            </div>
-                                        ))}
+                                              {load}
+                                          </div>
+                                      ))}
                                     </div>
                                 </div>
                             )}
