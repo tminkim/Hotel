@@ -177,3 +177,12 @@ button:focus {
     outline: none;
 }
 
+@media only screen and (max-width: 600px) {
+    .distribution-modal table {
+        font-size: 0.8rem; /* 텍스트 크기를 조정하여 모바일에서 보기 좋게 설정 */
+    }
+
+    .distribution-modal td {
+        padding: 0.5rem; /* 모바일 환경에서 패딩을 줄여 테이블의 크기를 줄임 */
+    }
+}
