@@ -4,11 +4,14 @@ const Facilities = () => {
   const [selectedFacility, setSelectedFacility] = useState(null);
 
   const facilitiesData = [
-    { id: 'substation', name: '변전실', description: '변전실 정보입니다.' },
     { id: 'elevator', name: '승강기', description: '승강기 정보입니다.' },
     { id: 'gondola', name: '곤도라', description: '곤도라 정보입니다.' },
     { id: 'ups', name: 'UPS', description: 'UPS 정보입니다.' },
   ];
+
+  const handleButtonClick = (facility) => {
+    setSelectedFacility(facility);
+  };
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -20,7 +23,7 @@ const Facilities = () => {
                 className={`facility-button w-full py-2 px-4 font-medium rounded mb-2 ${
                   selectedFacility && selectedFacility.id === facility.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
                 }`}
-                onClick={() => setSelectedFacility(facility)}
+                onClick={() => handleButtonClick(facility)}
               >
                 {facility.name}
               </button>

@@ -10,8 +10,9 @@ const PDFModal = ({ isOpen, onRequestClose, file }) => {
             contentLabel="PDF Viewer"
             className="pdf-fullscreen-modal"
             overlayClassName="overlay"
+            style={{ content: { overflowY: 'auto' } }}
         >
-            <button className="close-button" onClick={onRequestClose}>X</button>
+            <button className="pdf-close-button" onClick={onRequestClose}>X</button>
             <PDFViewer file={file} />
         </Modal>
     );

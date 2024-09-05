@@ -26,17 +26,16 @@ const Manual = () => {
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <div className="p-4">
                 <h3 className="text-lg font-semibold mb-4">매뉴얼</h3>
-                <div className="flex flex-wrap" style={{ justifyContent: 'flex-start', gap: '1rem' }}>
+                <div className="flex flex-wrap -mx-2">
                     {pdfStructure.folders.map(folder => (
-                        <div key={folder.folderName} style={{ flex: '1 1 calc(33.333% - 1rem)', maxWidth: 'calc(33.333% - 1rem)', marginBottom: '1rem' }}>
+                        <div key={folder.folderName} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                             <button
-                                className={`w-full py-2 px-4 font-medium rounded ${
+                                className={`w-full py-2 px-4 font-medium rounded mb-2 ${
                                     selectedFolder === folder.folderName 
-                                        ? 'bg-[#2566e8] text-white' // 클릭 시 색상
-                                        : 'bg-[#3498db] text-white hover:bg-[#2566e8]' // 기본 및 호버 색상
+                                        ? 'bg-blue-600 text-white' 
+                                        : 'bg-gray-200 text-gray-700'
                                 }`}
                                 onClick={() => handleFolderClick(folder.folderName)}
-                                style={{ transition: 'background-color 0.3s ease, color 0.3s ease' }}
                             >
                                 {folder.folderName}
                             </button>

@@ -8,12 +8,12 @@ const PDFViewer = ({ file }) => {
     const zoomPluginInstance = zoomPlugin();
 
     return (
-        <div className="pdf-viewer-container">
+        <div className="pdf-viewer-container" style={{ overflow: 'hidden' }}>
             <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
                 <Viewer
                     fileUrl={file}
                     initialPage={0}
-                    defaultScale={1.5}  // 페이지가 가로 길이에 맞도록 설정
+                    defaultScale={1.5}
                     plugins={[zoomPluginInstance]}
                 />
             </Worker>
