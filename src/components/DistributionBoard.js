@@ -15,6 +15,8 @@ const DistributionBoard = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedBoard, setSelectedBoard] = useState(null);
     const [showLoadList, setShowLoadList] = useState(false);
+    const [spareActive, setSpareActive] = useState(false); // SPARE 버튼 상태
+
     const loadListRef = useRef(null);
 
     const fetchCSVData = useCallback(async () => {
@@ -89,10 +91,19 @@ const DistributionBoard = () => {
             );
         }
 
+        if (spareActive) {
+            results = results.filter(board =>
+                Object.values(board).some(value =>
+                    typeof value === 'string' && /\bSP\b/.test(value)
+                ) ||
+                (board['분기'] && board['분기'].some(branch => /\bSP\b/.test(branch)))
+            );
+        }
+
         setFilteredBoards(results);
         setSearchPerformed(true);
         setSelectedLocation(null);
-    }, [filterType, floor, searchText, distributionBoards]);
+    }, [filterType, floor, searchText, distributionBoards, spareActive]);
 
     useEffect(() => {
         fetchCSVData();
@@ -100,7 +111,7 @@ const DistributionBoard = () => {
 
     useEffect(() => {
         handleSearch();
-    }, [filterType, floor, searchText, distributionBoards, handleSearch]);
+    }, [filterType, floor, searchText, distributionBoards, handleSearch, spareActive]);
 
     const getMarkerPosition = (location) => {
         if (!location) return { x: 0, y: 0 };
@@ -188,6 +199,12 @@ const DistributionBoard = () => {
                                     type === 'three-phase-three-wire' ? '3상3선' : '3상4선'}
                                 </button>
                             ))}
+                            <button
+                                className={`m-1 px-3 py-1 text-sm rounded-full ${spareActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                onClick={() => setSpareActive(!spareActive)}
+                            >
+                                SPARE
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -303,10 +320,10 @@ const DistributionBoard = () => {
                                     <h3 className="font-bold mb-2">부하 리스트</h3>
                                     <div className="grid grid-cols-2 gap-4">
                                         {selectedBoard['분기'].map((load, index) => (
-                                            <div key={index} className="bg-white p-2 border rounded shadow-sm">
-                                              {load}
-                                          </div>
-                                      ))}
+                                            <div key={index} className={`bg-white p-2 border rounded shadow-sm ${load.includes('SP') ? 'sp-highlight' : ''}`}>
+                                                {load}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
