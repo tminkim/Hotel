@@ -116,7 +116,7 @@
 
 .modal-content {
     overflow-y: auto;
-    max-height: calc(80vh - 40px); /* 모달 창에서 닫기 버튼 높이와 패딩을 고려한 최대 높이 */
+    max-height: calc(85vh); /* 모달 창에서 닫기 버튼 높이와 패딩을 고려한 최대 높이 */
 }
 
 /* 공통 Flex 스타일 */
@@ -207,7 +207,7 @@ button:focus {
     }
 
     .distribution-modal {
-        width: 80%; /* 모달 창의 너비 */
+        width: 85%; /* 모달 창의 너비 */
         max-width: 800px; /* 최대 너비 */
         min-height: 50vh; /* 최소 높이를 50% 뷰포트 높이로 설정 */
         max-height: 90vh; /* 최대 높이를 90% 뷰포트 높이로 설정 */
