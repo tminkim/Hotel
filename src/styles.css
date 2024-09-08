@@ -61,6 +61,58 @@
     position: relative;
 }
 
+/* 시설 모달 창 스타일 */
+.facility-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    outline: none;
+    width: 80%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  
+  .facility-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .facility-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #3498db;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .facility-close-button:hover {
+    background: #2980b9;
+  }
+  
+  .facility-close-button:focus {
+    outline: none;
+  }
+  
 .pdf-fullscreen-modal {
     position: fixed;
     top: 0;
@@ -116,7 +168,7 @@
 
 .modal-content {
     overflow-y: auto;
-    max-height: calc(85vh); /* 모달 창에서 닫기 버튼 높이와 패딩을 고려한 최대 높이 */
+    max-height: calc(85vh);
 }
 
 /* 공통 Flex 스타일 */

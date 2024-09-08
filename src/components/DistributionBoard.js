@@ -20,7 +20,7 @@ const DistributionBoard = () => {
     const loadListRef = useRef(null);
 
     const fetchCSVData = useCallback(async () => {
-        const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1oBO54GD6oM-L-DR15m5t6Aq6ubV7Q1dfBEGe4Hq7DpA/export?format=csv';
+        const SPREADSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1QHwv1YpflqE6T9AEcEbP47CRWPXKwuOJ4lFmC8RPM_M/export?format=csv';
         
         try {
             const response = await fetch(SPREADSHEET_CSV_URL);
