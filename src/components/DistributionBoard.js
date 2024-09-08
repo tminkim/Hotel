@@ -202,6 +202,7 @@ const DistributionBoard = () => {
                             <button
                                 className={`m-1 px-3 py-1 text-sm rounded-full filter-button ${spareActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
                                 onClick={() => setSpareActive(!spareActive)}
+                                style={{ minWidth: 'auto', padding: '0.5rem 0.75rem' }}  // 패딩과 최소 너비를 설정하여 모양을 유지
                             >
                                 SPARE
                             </button>
