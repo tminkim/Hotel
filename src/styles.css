@@ -191,3 +191,17 @@ button:focus {
         padding: 0.5rem; /* 모바일 환경에서 패딩을 줄여 테이블의 크기를 줄임 */
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .filter-button {
+        font-size: 0.75rem; /* 버튼 글씨 크기를 줄임 */
+        padding: 0.5rem 0.75rem; /* 버튼 크기를 줄여서 한 줄에 유지 */
+    }
+
+    /* 모달 창 크기 조정 */
+    .distribution-modal {
+        width: 90%; /* 모바일 환경에서 모달의 너비를 키움 */
+        max-width: 90%; /* 최대 너비 조정 */
+        height: calc(100vh - 20px); /* 모바일 환경에서 모달의 높이를 키움 */
+    }
+}

@@ -191,7 +191,7 @@ const DistributionBoard = () => {
                             {['all', 'single', 'three-phase-three-wire', 'three-phase-four-wire'].map((type) => (
                                 <button
                                     key={type}
-                                    className={`m-1 px-3 py-1 text-sm rounded-full ${filterType === type ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                    className={`m-1 px-3 py-1 text-sm rounded-full filter-button ${filterType === type ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
                                     onClick={() => setFilterType(type)}
                                 >
                                     {type === 'all' ? '전체' : 
@@ -200,7 +200,7 @@ const DistributionBoard = () => {
                                 </button>
                             ))}
                             <button
-                                className={`m-1 px-3 py-1 text-sm rounded-full ${spareActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                                className={`m-1 px-3 py-1 text-sm rounded-full filter-button ${spareActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
                                 onClick={() => setSpareActive(!spareActive)}
                             >
                                 SPARE
