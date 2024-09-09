@@ -155,9 +155,22 @@ const Facilities = () => {
     setSelectedData(null);
   };
 
+  // 천단위 쉼표 추가 및 특별한 값 처리 함수
+  const formatValue = (field, value) => {
+    // 하중(KG)과 정원(인) 필드에만 쉼표 추가
+    if (field === '하중(KG)' || field === '정원(인)') {
+      // 숫자 포함된 문자열 처리 ('6000명/hr' -> '6,000명/hr')
+      if (/\d/.test(value) && typeof value === 'string') {
+        return value.replace(/\d+/, match => Number(match).toLocaleString());
+      }
+    }
+
+    return value; // 다른 경우는 원래 값을 그대로 반환
+  };
+
   // 1열 데이터를 렌더링하는 함수
   const renderFirstColumnData = () => {
-    const gridTemplateColumns = selectedFacility.id === 'ups' ? 'repeat(2, 1fr)' : 'repeat(2, 1fr)'; // 2열로 설정
+    const gridTemplateColumns = 'repeat(2, 1fr)'; // 2열로 설정
 
     return (
       <div className="grid gap-2" style={{ gridTemplateColumns }}>
@@ -190,7 +203,9 @@ const Facilities = () => {
           {fields.map((field, index) => (
             <tr key={index} className="border border-gray-300">
               <td className="font-bold p-2 border border-gray-300">{field}</td>
-              <td className="p-2 border border-gray-300">{selectedData[field]}</td>
+              <td className="p-2 border border-gray-300">
+                {formatValue(field, selectedData[field])}
+              </td>
             </tr>
           ))}
         </tbody>
