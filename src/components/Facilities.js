@@ -11,6 +11,8 @@ const Facilities = () => {
   const [firstColumnData, setFirstColumnData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
+  const [markerData, setMarkerData] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   // CSV 데이터를 파싱하는 함수
   const parseCSV = (text) => {
@@ -83,25 +85,54 @@ const Facilities = () => {
     { id: 'ups', name: 'UPS', description: 'UPS 정보입니다.' },
   ];
 
+  // 마커 위치 계산 함수
+  const getMarkerPosition = (location) => {
+    if (!location) return null;
+    const [x, y] = location.split('-').map(Number);
+    return { x: x / 10, y: y / 10 };
+  };
+
   // 시설 버튼 클릭 시 이미지와 1열 데이터를 설정하는 함수
   const handleButtonClick = (facility) => {
     setSelectedFacility(facility);
     let image = null;
     let data = [];
+    let markerData = [];
 
     if (facility.id === 'elevator') {
-      image = '/images/elevator-floor-plan.jpg';  // 승강기 도면 이미지 경로
+      image = '/images/lobby.jpg';
       data = elevatorData.map(item => item['호기']);
+      markerData = elevatorData.map(item => item['위치']);
     } else if (facility.id === 'gondola') {
-      image = '/images/gondola-floor-plan.jpg';  // 곤도라 도면 이미지 경로
+      image = '/images/lobby.jpg';
       data = gondolaData.map(item => item['호기']);
+      markerData = gondolaData.map(item => item['위치']);
     } else if (facility.id === 'ups') {
-      image = null;  // UPS는 이미지 없음
+      image = null;
       data = upsData.map(item => item['장소']);
     }
 
     setSelectedImage(image);
     setFirstColumnData(data);
+    setMarkerData(markerData);
+    setSelectedLocation(null); // 마커 선택 해제
+  };
+
+  // 마커 클릭 시 데이터 필터링
+  const handleMarkerClick = (location) => {
+    if (selectedLocation === location) {
+      setSelectedLocation(null); // 마커 선택 해제
+      const data = selectedFacility.id === 'elevator'
+        ? elevatorData.map(item => item['호기'])
+        : gondolaData.map(item => item['호기']);
+      setFirstColumnData(data); // 전체 데이터 표시
+    } else {
+      setSelectedLocation(location); // 새로운 위치 선택
+      const filteredData = selectedFacility.id === 'elevator'
+        ? elevatorData.filter(item => item['위치'] === location).map(item => item['호기'])
+        : gondolaData.filter(item => item['위치'] === location).map(item => item['호기']);
+      setFirstColumnData(filteredData); // 필터링된 데이터만 표시
+    }
   };
 
   // 1열 데이터 버튼 클릭 시 모달 창 열기
@@ -126,7 +157,7 @@ const Facilities = () => {
 
   // 1열 데이터를 렌더링하는 함수
   const renderFirstColumnData = () => {
-    const gridTemplateColumns = selectedFacility.id === 'ups' ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)';
+    const gridTemplateColumns = selectedFacility.id === 'ups' ? 'repeat(2, 1fr)' : 'repeat(2, 1fr)'; // 2열로 설정
 
     return (
       <div className="grid gap-2" style={{ gridTemplateColumns }}>
@@ -148,7 +179,7 @@ const Facilities = () => {
     if (!selectedData) return null;
 
     const fields = selectedFacility.id === 'elevator' 
-      ? ['호기', '기종', '용도', '하중(KG)', '정원(인)', '속도(m/min)', '전원(AC)', '전동기(kW)', '운행층', '준공일', '제작사', '유지보수업체', '비고']
+      ? ['호기', '기종', '용도', '하중(KG)', '정원(인)', '속도(m/min)', '전원(AC)', '전동기(kW)', '운행층', '준공일', '제작사', '유지보수업체', '위치', '비고']
       : selectedFacility.id === 'gondola'
       ? ['호기', '위치', '용도', '형식', '승강양정(M)', '적재량(kg)', '전원(V)', '승강모터(kW)', '주행모터(kW)', '암터링모터(kW)', '회전모터(kW)', '승강속도(M/min)', '주행속도(M/min)', '암터링속도(M/min)', '대차회전속도(RPM)', '와이어로프(mm)', '제조사', '설치년도', '검사년도', '비고']
       : ['장소', '타입', '용량', '전압', '제조번호', '제작년월', '축전지', '축전지년월', '설치업체', '유지보수', '비고'];
@@ -187,7 +218,26 @@ const Facilities = () => {
         {selectedFacility && (
           <div className="facility-details">
             <h4 className="text-lg font-semibold">{selectedFacility.name}</h4>
-            {selectedImage && <img src={selectedImage} alt={`${selectedFacility.name} 도면`} className="w-full h-auto mb-4" />}
+            {selectedImage && (
+              <div className="relative mb-4">
+                <img src={selectedImage} alt={`${selectedFacility.name} 도면`} className="w-full h-auto" />
+                {markerData && markerData.map((location, index) => {
+                  const position = getMarkerPosition(location);
+                  if (position) {
+                    return (
+                      <div
+                        key={index}
+                        className={`absolute w-2 h-2 rounded-full ${selectedLocation === location ? 'bg-green-500' : 'bg-red-500'}`}
+                        style={{ left: `${position.x}%`, top: `${position.y}%` }}
+                        title={`Marker ${index + 1}`}
+                        onClick={() => handleMarkerClick(location)}
+                      ></div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            )}
             {renderFirstColumnData()}
           </div>
         )}
@@ -209,6 +259,13 @@ const Facilities = () => {
               {selectedImage && (
                 <div className="relative mb-4">
                   <img src={selectedImage} alt={`${selectedFacility.name} 도면`} className="w-full h-auto" />
+                  {selectedData['위치'] && (
+                    <div
+                      className="absolute w-2 h-2 bg-red-500 rounded-full"  // 분전반 모달과 동일한 색상 적용
+                      style={{ left: `${getMarkerPosition(selectedData['위치']).x}%`, top: `${getMarkerPosition(selectedData['위치']).y}%` }}
+                      title="Selected Location"
+                    ></div>
+                  )}
                 </div>
               )}
               {renderModalContent()}
