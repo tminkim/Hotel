@@ -97,10 +97,7 @@ const DistributionBoard = () => {
         // SPARE 필터링
         if (spareActive) {
             results = results.filter(board =>
-                Object.values(board).some(value =>
-                    typeof value === 'string' && /\bSP\b/.test(value)
-                ) ||
-                (board['분기'] && board['분기'].some(branch => /\bSP\b/.test(branch)))
+                board['분기'] && board['분기'].some(branch => branch.match(/\bSP\b/))
             );
         }
 
@@ -129,13 +126,10 @@ const DistributionBoard = () => {
 
     const handleMarkerClick = (location) => {
         if (selectedLocation === location) {
-            // 마커 선택 해제 시 현재 층의 모든 마커를 표시
-            setSelectedLocation(null);
+            setSelectedLocation(null);  // 마커 선택 해제
         } else {
-            // 마커 선택 시 해당 위치 데이터만 필터링
-            setSelectedLocation(location);
+            setSelectedLocation(location);  // 마커 선택
         }
-        setSearchPerformed(true);
     };
 
     const openModal = (board) => {
@@ -224,14 +218,29 @@ const DistributionBoard = () => {
                         <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
                         {distributionBoards.filter(board => board['층'] === floor).map((board, index) => {
                             const { x, y } = getMarkerPosition(board['장소']);
-                            const isSpareInResults = filteredBoards.some(filteredBoard => filteredBoard['장소'] === board['장소'] && spareActive);
+                            let markerColor = 'bg-red-500'; // 기본 색상 (빨간색)
+
+                            // SPARE 데이터 확인
+                            const isSpareBoard = board['분기'] && board['분기'].some(branch => branch.match(/\bSP\b/));
+                            
+                            if (spareActive && isSpareBoard) {
+                                markerColor = 'bg-green-500'; // SPARE 데이터에 해당하는 마커는 초록색
+                            }
+
+                            if (selectedLocation === board['장소']) {
+                                markerColor = 'bg-blue-500'; // 클릭한 마커는 파란색
+                            }
+
                             return (
                                 <div
                                     key={index}
-                                    className={`absolute w-2 h-2 rounded-full ${selectedLocation === board['장소'] ? 'bg-blue-500' : 'bg-red-500'} ${isSpareInResults ? 'border border-blue-500' : ''}`}
+                                    className={`absolute w-2 h-2 rounded-full ${markerColor}`}
                                     style={{ left: `${x}%`, top: `${y}%` }}
                                     title={board['분전반 명칭']}
-                                    onClick={() => handleMarkerClick(board['장소'])}
+                                    onClick={() => {
+                                        handleMarkerClick(board['장소']);
+                                        applyFilters(); // 마커 클릭 후 필터 적용
+                                    }}
                                 ></div>
                             );
                         })}
