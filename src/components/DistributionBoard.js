@@ -15,7 +15,7 @@ const DistributionBoard = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedBoard, setSelectedBoard] = useState(null);
     const [showLoadList, setShowLoadList] = useState(false);
-    const [spareActive, setSpareActive] = useState(false); // SPARE 버튼 상태
+    const [spareActive, setSpareActive] = useState(false);
 
     const loadListRef = useRef(null);
 
@@ -121,10 +121,13 @@ const DistributionBoard = () => {
 
     const handleMarkerClick = (location) => {
         if (selectedLocation === location) {
-            handleSearch();
+            // 마커 선택 해제 시 현재 층의 모든 마커를 표시
             setSelectedLocation(null);
+            const currentFloorBoards = distributionBoards.filter(board => board['층'] === floor);
+            setFilteredBoards(currentFloorBoards);
         } else {
-            const results = distributionBoards.filter(board => board['장소'] === location);
+            // 마커 선택 시 해당 위치 데이터만 필터링
+            const results = distributionBoards.filter(board => board['장소'] === location && board['층'] === floor);
             setFilteredBoards(results);
             setSelectedLocation(location);
         }
@@ -135,14 +138,14 @@ const DistributionBoard = () => {
         setSelectedBoard(board);
         setShowLoadList(false);
         setModalIsOpen(true);
-        document.body.style.overflow = 'hidden'; // 모달이 열리면 배경 스크롤 막기
+        document.body.style.overflow = 'hidden';
     };
 
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedBoard(null);
         setShowLoadList(false);
-        document.body.style.overflow = 'auto'; // 모달이 닫히면 배경 스크롤 허용
+        document.body.style.overflow = 'auto';
     };
 
     const toggleLoadList = () => {
@@ -202,7 +205,7 @@ const DistributionBoard = () => {
                             <button
                                 className={`m-1 px-3 py-1 text-sm rounded-full filter-button ${spareActive ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
                                 onClick={() => setSpareActive(!spareActive)}
-                                style={{ minWidth: 'auto', padding: '0.5rem 0.75rem' }}  // 패딩과 최소 너비를 설정하여 모양을 유지
+                                style={{ minWidth: 'auto', padding: '0.5rem 0.75rem' }}
                             >
                                 SPARE
                             </button>
@@ -215,12 +218,12 @@ const DistributionBoard = () => {
                 <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
                     <div className="relative">
                         <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
-                        {filteredBoards.map((board, index) => {
+                        {distributionBoards.filter(board => board['층'] === floor).map((board, index) => {
                             const { x, y } = getMarkerPosition(board['장소']);
                             return (
                                 <div
                                     key={index}
-                                    className={`absolute w-2 h-2 rounded-full ${selectedLocation === board['장소'] ? 'bg-green-500' : 'bg-red-500'}`}
+                                    className={`absolute w-2 h-2 rounded-full ${selectedLocation === board['장소'] ? 'bg-blue-500' : 'bg-red-500'}`}
                                     style={{ left: `${x}%`, top: `${y}%` }}
                                     title={board['분전반 명칭']}
                                     onClick={() => handleMarkerClick(board['장소'])}

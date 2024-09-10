@@ -192,9 +192,9 @@ const Facilities = () => {
     if (!selectedData) return null;
 
     const fields = selectedFacility.id === 'elevator' 
-      ? ['호기', '기종', '용도', '하중(KG)', '정원(인)', '속도(m/min)', '전원(AC)', '전동기(kW)', '운행층', '준공일', '제작사', '유지보수업체', '위치', '비고']
+      ? ['호기', '기종', '용도', '하중(KG)', '정원(인)', '속도(m/min)', '전원(AC)', '전동기(kW)', '운행층', '준공일', '제작사', '유지보수업체', '비고']
       : selectedFacility.id === 'gondola'
-      ? ['호기', '위치', '용도', '형식', '승강양정(M)', '적재량(kg)', '전원(V)', '승강모터(kW)', '주행모터(kW)', '암터링모터(kW)', '회전모터(kW)', '승강속도(M/min)', '주행속도(M/min)', '암터링속도(M/min)', '대차회전속도(RPM)', '와이어로프(mm)', '제조사', '설치년도', '검사년도', '비고']
+      ? ['호기', '장소', '용도', '형식', '승강양정(M)', '적재량(kg)', '전원(V)', '승강모터(kW)', '주행모터(kW)', '암터링모터(kW)', '회전모터(kW)', '승강속도(M/min)', '주행속도(M/min)', '암터링속도(M/min)', '대차회전속도(RPM)', '와이어로프(mm)', '제조사', '설치년도', '검사년도', '비고']
       : ['장소', '타입', '용량', '전압', '제조번호', '제작년월', '축전지', '축전지년월', '설치업체', '유지보수', '비고'];
 
     return (
@@ -242,7 +242,7 @@ const Facilities = () => {
                     return (
                       <div
                         key={index}
-                        className={`absolute w-2 h-2 rounded-full ${selectedLocation === location ? 'bg-green-500' : 'bg-red-500'}`}
+                        className={`absolute w-2 h-2 rounded-full ${selectedLocation === location ? 'bg-blue-500' : 'bg-red-500'}`}
                         style={{ left: `${position.x}%`, top: `${position.y}%` }}
                         title={`Marker ${index + 1}`}
                         onClick={() => handleMarkerClick(location)}
