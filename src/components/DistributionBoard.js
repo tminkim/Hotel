@@ -62,9 +62,10 @@ const DistributionBoard = () => {
         return data;
     };
 
-    const handleSearch = useCallback(() => {
+    const applyFilters = useCallback(() => {
         let results = distributionBoards;
 
+        // 전압 필터링
         if (filterType !== 'all') {
             if (filterType === 'single') {
                 results = results.filter(board => board['전압'] && board['전압'].includes('1상'));
@@ -75,6 +76,7 @@ const DistributionBoard = () => {
             }
         }
 
+        // 층 필터링
         if (floor) {
             results = results.filter(board => board['층'] === floor);
             setSelectedFloorPlan(`/images/${floor}.jpg`);
@@ -82,6 +84,7 @@ const DistributionBoard = () => {
             setSelectedFloorPlan(null);
         }
 
+        // 검색어 필터링
         if (searchText) {
             results = results.filter(board =>
                 Object.values(board).some(value =>
@@ -91,6 +94,7 @@ const DistributionBoard = () => {
             );
         }
 
+        // SPARE 필터링
         if (spareActive) {
             results = results.filter(board =>
                 Object.values(board).some(value =>
@@ -100,18 +104,22 @@ const DistributionBoard = () => {
             );
         }
 
+        // 마커 클릭으로 필터링
+        if (selectedLocation) {
+            results = results.filter(board => board['장소'] === selectedLocation);
+        }
+
         setFilteredBoards(results);
         setSearchPerformed(true);
-        setSelectedLocation(null);
-    }, [filterType, floor, searchText, distributionBoards, spareActive]);
+    }, [filterType, floor, searchText, distributionBoards, spareActive, selectedLocation]);
 
     useEffect(() => {
         fetchCSVData();
     }, [fetchCSVData]);
 
     useEffect(() => {
-        handleSearch();
-    }, [filterType, floor, searchText, distributionBoards, handleSearch, spareActive]);
+        applyFilters();
+    }, [filterType, floor, searchText, spareActive, selectedLocation, applyFilters]);
 
     const getMarkerPosition = (location) => {
         if (!location) return { x: 0, y: 0 };
@@ -123,12 +131,8 @@ const DistributionBoard = () => {
         if (selectedLocation === location) {
             // 마커 선택 해제 시 현재 층의 모든 마커를 표시
             setSelectedLocation(null);
-            const currentFloorBoards = distributionBoards.filter(board => board['층'] === floor);
-            setFilteredBoards(currentFloorBoards);
         } else {
             // 마커 선택 시 해당 위치 데이터만 필터링
-            const results = distributionBoards.filter(board => board['장소'] === location && board['층'] === floor);
-            setFilteredBoards(results);
             setSelectedLocation(location);
         }
         setSearchPerformed(true);
@@ -185,7 +189,7 @@ const DistributionBoard = () => {
                             />
                             <button
                                 className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
-                                onClick={handleSearch}
+                                onClick={applyFilters}
                             >
                                 <Search size={20} />
                             </button>
@@ -220,10 +224,11 @@ const DistributionBoard = () => {
                         <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
                         {distributionBoards.filter(board => board['층'] === floor).map((board, index) => {
                             const { x, y } = getMarkerPosition(board['장소']);
+                            const isSpareInResults = filteredBoards.some(filteredBoard => filteredBoard['장소'] === board['장소'] && spareActive);
                             return (
                                 <div
                                     key={index}
-                                    className={`absolute w-2 h-2 rounded-full ${selectedLocation === board['장소'] ? 'bg-blue-500' : 'bg-red-500'}`}
+                                    className={`absolute w-2 h-2 rounded-full ${selectedLocation === board['장소'] ? 'bg-blue-500' : 'bg-red-500'} ${isSpareInResults ? 'border border-blue-500' : ''}`}
                                     style={{ left: `${x}%`, top: `${y}%` }}
                                     title={board['분전반 명칭']}
                                     onClick={() => handleMarkerClick(board['장소'])}
