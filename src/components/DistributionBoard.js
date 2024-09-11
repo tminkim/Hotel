@@ -216,13 +216,13 @@ const DistributionBoard = () => {
                 <div className="bg-white shadow-md rounded-lg overflow-hidden mb-4">
                     <div className="relative">
                         <img src={selectedFloorPlan} alt="Floor Plan" className="w-full h-auto" />
-                        {distributionBoards.filter(board => board['층'] === floor).map((board, index) => {
+                        {distributionBoards.filter(board => board['층'] === floor && (!spareActive || (spareActive && board['분기'] && board['분기'].some(branch => branch.match(/\bSP\b/))))).map((board, index) => {
                             const { x, y } = getMarkerPosition(board['장소']);
                             let markerColor = 'bg-red-500'; // 기본 색상 (빨간색)
 
                             // SPARE 데이터 확인
                             const isSpareBoard = board['분기'] && board['분기'].some(branch => branch.match(/\bSP\b/));
-                            
+
                             if (spareActive && isSpareBoard) {
                                 markerColor = 'bg-green-500'; // SPARE 데이터에 해당하는 마커는 초록색
                             }
