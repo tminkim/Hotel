@@ -2,11 +2,11 @@
     "folders": [
       {
         "folderName": "변전실",
-        "files": ["01.pdf"]
+        "files": ["변전실.pdf"]
       },
       {
-        "folderName": "객실",
-        "files": ["02.pdf"]
-      }  
+        "folderName": "식음",
+        "files": ["도림.pdf", "라세느.pdf", "로비라운지.pdf", "픽업존.pdf"]
+      }
     ]
   }
