@@ -2,7 +2,7 @@ import React from "react";
 
 const TestGetRequest = () => {
   const handleGetRequest = async () => {
-    const scriptUrl = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Web App URL
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbx82E0vh4-j2mbpaScaiKzNHsD5kl6sqGudW6uf8J9RhLSRB6W16FqAyR4RJ8-e8j0X/exec"; // Web App URL
 
     try {
       const response = await fetch(scriptUrl, {
