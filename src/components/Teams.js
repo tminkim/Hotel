@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const App = () => {
-  const [testResult, setTestResult] = useState("");
+  const [testResult, setTestResult] = useState(""); // 요청 결과를 저장하는 상태
   const [formData, setFormData] = useState({
     date: "2025-01-01",
     supervisor: "홍길동",
@@ -13,9 +13,9 @@ const App = () => {
     endTime: "18:00",
   });
 
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbx82E0vh4-j2mbpaScaiKzNHsD5kl6sqGudW6uf8J9RhLSRB6W16FqAyR4RJ8-e8j0X/exec"; // Web App URL 입력
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbx82E0vh4-j2mbpaScaiKzNHsD5kl6sqGudW6uf8J9RhLSRB6W16FqAyR4RJ8-e8j0X/exec"; // Google Apps Script Web App URL 입력
 
-  // GET 요청 테스트
+  // GET 요청 테스트 함수
   const testGetRequest = async () => {
     try {
       const response = await fetch(scriptUrl, {
@@ -35,7 +35,7 @@ const App = () => {
     }
   };
 
-  // POST 요청 테스트
+  // POST 요청 테스트 함수
   const testPostRequest = async () => {
     try {
       const response = await fetch(scriptUrl, {
@@ -68,22 +68,37 @@ const App = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h1>React - Google Apps Script 테스트</h1>
+
+      {/* GET 요청 버튼 */}
       <button
         onClick={testGetRequest}
-        style={{ margin: "10px", padding: "10px", backgroundColor: "blue", color: "white" }}
+        style={{
+          margin: "10px",
+          padding: "10px",
+          backgroundColor: "blue",
+          color: "white",
+        }}
       >
         Test GET Request
       </button>
+
+      {/* POST 요청 버튼 */}
       <button
         onClick={testPostRequest}
-        style={{ margin: "10px", padding: "10px", backgroundColor: "green", color: "white" }}
+        style={{
+          margin: "10px",
+          padding: "10px",
+          backgroundColor: "green",
+          color: "white",
+        }}
       >
         Test POST Request
       </button>
+
       <h3>Test Result:</h3>
       <pre>{testResult}</pre>
 
-      <h2>POST 데이터 입력</h2>
+      <h2>POST 요청 데이터 입력</h2>
       <form>
         <label>
           Date:
