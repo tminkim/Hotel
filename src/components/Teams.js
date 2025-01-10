@@ -28,6 +28,7 @@ function App() {
 
   // POST 요청 처리 함수
   const handlePostRequest = async () => {
+  
     try {
       const response = await fetch(scriptUrl, {
         method: 'POST',
@@ -39,62 +40,17 @@ function App() {
           key2: 'value2',
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const data = await response.json();
-      setPostResponse(data); // 응답 데이터 저장
+      setPostResponse(data); // 응답 데이터를 상태로 저장
     } catch (error) {
       console.error('POST 요청 실패:', error.message);
       setPostResponse({ error: error.message });
     }
   };
-
-  return (
-    <div style={{ padding: '20px' }}>
-      <h1>React와 Google Apps Script 통신 테스트</h1>
-
-      {/* GET 요청 버튼 */}
-      <button
-        onClick={handleGetRequest}
-        style={{
-          margin: '10px',
-          padding: '10px',
-          backgroundColor: 'blue',
-          color: 'white',
-        }}
-      >
-        GET 요청 보내기
-      </button>
-      {getResponse && (
-        <div>
-          <h2>GET 응답:</h2>
-          <pre>{JSON.stringify(getResponse, null, 2)}</pre>
-        </div>
-      )}
-
-      {/* POST 요청 버튼 */}
-      <button
-        onClick={handlePostRequest}
-        style={{
-          margin: '10px',
-          padding: '10px',
-          backgroundColor: 'green',
-          color: 'white',
-        }}
-      >
-        POST 요청 보내기
-      </button>
-      {postResponse && (
-        <div>
-          <h2>POST 응답:</h2>
-          <pre>{JSON.stringify(postResponse, null, 2)}</pre>
-        </div>
-      )}
-    </div>
-  );
 }
-
 export default App;
