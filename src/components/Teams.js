@@ -1,188 +1,100 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-const App = () => {
-  const [testResult, setTestResult] = useState(""); // 요청 결과를 저장하는 상태
-  const [formData, setFormData] = useState({
-    date: "2025-01-01",
-    supervisor: "홍길동",
-    taskName: "테스트 작업",
-    taskLocation: "서울",
-    personnel: 10,
-    risks: "고소 작업",
-    startTime: "10:00",
-    endTime: "18:00",
-  });
+function App() {
+  const [getResponse, setGetResponse] = useState(null); // GET 요청 응답 저장
+  const [postResponse, setPostResponse] = useState(null); // POST 요청 응답 저장
 
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbx82E0vh4-j2mbpaScaiKzNHsD5kl6sqGudW6uf8J9RhLSRB6W16FqAyR4RJ8-e8j0X/exec"; // Google Apps Script Web App URL 입력
+  // Google Apps Script Web App URL
+  const scriptUrl = 'https://script.google.com/macros/s/AKfycbz5xUWk83jBMAGSf6_VM7Islde0bjc4aWw1WIb5pJJkAQx3kmAbc370xOnRStOssBY/exec'; // Web App URL로 변경
 
-  // GET 요청 테스트 함수
-  const testGetRequest = async () => {
+  // GET 요청 처리 함수
+  const handleGetRequest = async () => {
     try {
-      const response = await fetch(scriptUrl, {
-        method: "GET",
+      const response = await fetch(`${scriptUrl}?param1=value1&param2=value2`, {
+        method: 'GET',
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
-      console.log("GET Response:", result);
-      setTestResult(`GET Response: ${JSON.stringify(result)}`);
+      const data = await response.json();
+      setGetResponse(data); // 응답 데이터 저장
     } catch (error) {
-      console.error("GET Request Error:", error.message);
-      setTestResult(`GET 요청 실패: ${error.message}`);
+      console.error('GET 요청 실패:', error.message);
+      setGetResponse({ error: error.message });
     }
   };
 
-  // POST 요청 테스트 함수
-  const testPostRequest = async () => {
+  // POST 요청 처리 함수
+  const handlePostRequest = async () => {
     try {
       const response = await fetch(scriptUrl, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          key1: 'value1',
+          key2: 'value2',
+        }),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
-      console.log("POST Response:", result);
-      setTestResult(`POST Response: ${JSON.stringify(result)}`);
+      const data = await response.json();
+      setPostResponse(data); // 응답 데이터 저장
     } catch (error) {
-      console.error("POST Request Error:", error.message);
-      setTestResult(`POST 요청 실패: ${error.message}`);
+      console.error('POST 요청 실패:', error.message);
+      setPostResponse({ error: error.message });
     }
-  };
-
-  // 폼 데이터 변경 핸들러
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>React - Google Apps Script 테스트</h1>
+    <div style={{ padding: '20px' }}>
+      <h1>React와 Google Apps Script 통신 테스트</h1>
 
       {/* GET 요청 버튼 */}
       <button
-        onClick={testGetRequest}
+        onClick={handleGetRequest}
         style={{
-          margin: "10px",
-          padding: "10px",
-          backgroundColor: "blue",
-          color: "white",
+          margin: '10px',
+          padding: '10px',
+          backgroundColor: 'blue',
+          color: 'white',
         }}
       >
-        Test GET Request
+        GET 요청 보내기
       </button>
+      {getResponse && (
+        <div>
+          <h2>GET 응답:</h2>
+          <pre>{JSON.stringify(getResponse, null, 2)}</pre>
+        </div>
+      )}
 
       {/* POST 요청 버튼 */}
       <button
-        onClick={testPostRequest}
+        onClick={handlePostRequest}
         style={{
-          margin: "10px",
-          padding: "10px",
-          backgroundColor: "green",
-          color: "white",
+          margin: '10px',
+          padding: '10px',
+          backgroundColor: 'green',
+          color: 'white',
         }}
       >
-        Test POST Request
+        POST 요청 보내기
       </button>
-
-      <h3>Test Result:</h3>
-      <pre>{testResult}</pre>
-
-      <h2>POST 요청 데이터 입력</h2>
-      <form>
-        <label>
-          Date:
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Supervisor:
-          <input
-            type="text"
-            name="supervisor"
-            value={formData.supervisor}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Task Name:
-          <input
-            type="text"
-            name="taskName"
-            value={formData.taskName}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Task Location:
-          <input
-            type="text"
-            name="taskLocation"
-            value={formData.taskLocation}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Personnel:
-          <input
-            type="number"
-            name="personnel"
-            value={formData.personnel}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Risks:
-          <input
-            type="text"
-            name="risks"
-            value={formData.risks}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Start Time:
-          <input
-            type="time"
-            name="startTime"
-            value={formData.startTime}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          End Time:
-          <input
-            type="time"
-            name="endTime"
-            value={formData.endTime}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-      </form>
+      {postResponse && (
+        <div>
+          <h2>POST 응답:</h2>
+          <pre>{JSON.stringify(postResponse, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default App;
