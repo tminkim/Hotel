@@ -27,35 +27,31 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 데이터를 Google Drive에 업로드 (API URL을 실제로 대체해야 함)
-    const formDataToUpload = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === 'photos') {
-        value.forEach((photo, index) => formDataToUpload.append(`photo_${index}`, photo));
-      } else {
-        formDataToUpload.append(key, value);
-      }
-    });
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbyQCjjg_qV_-JpYUfBJdFLUR82HBNIxTONklocQ3r7aDhs1ctAFo2n6StP3b_rE_vXV/exec';
 
     try {
-      const response = await fetch('https://your-google-drive-upload-url', {
+      const response = await fetch(scriptUrl, {
         method: 'POST',
-        body: formDataToUpload,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        alert('데이터가 성공적으로 업로드되었습니다!');
+      const result = await response.json();
+      if (result.status === 'success') {
+        alert('데이터가 성공적으로 Google Sheets에 저장되었습니다.');
       } else {
-        alert('업로드 중 문제가 발생했습니다.');
+        alert(`오류 발생: ${result.message}`);
       }
     } catch (error) {
-      console.error('Error uploading data:', error);
-      alert('업로드 실패!');
+      console.error('Error:', error);
+      alert('데이터 저장 실패!');
     }
   };
 
   return (
-    <form className="bg-white shadow-md rounded-lg p-4" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-4">
       <div className="mb-4">
         <label htmlFor="date" className="block text-sm font-medium mb-2">
           확인일시
@@ -134,9 +130,9 @@ const Form = () => {
           id="risks"
           name="risks"
           className="w-full p-2 border rounded"
+          rows="3"
           value={formData.risks}
           onChange={handleChange}
-          rows="3"
           required
         />
       </div>
