@@ -7,9 +7,6 @@ import PendingApproval from './components/PendingApproval';
 const App = () => {
   const [activeTab, setActiveTab] = useState('distributionBoard');
 
-  // 부모에서 pendingItems 상태를 관리
-  const [pendingItems, setPendingItems] = useState([]);
-
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
@@ -29,7 +26,7 @@ const App = () => {
                   ? '시설물 현황'
                   : tab === 'teams'
                   ? '위험작업 등록'
-                  : '작업승인 대기'}
+                  : '승인 대기 목록'}
               </button>
             ))}
           </div>
@@ -37,18 +34,8 @@ const App = () => {
 
         {activeTab === 'distributionBoard' && <DistributionBoard />}
         {activeTab === 'facilities' && <Facilities />}
-        {activeTab === 'teams' && (
-          <Teams
-            pendingItems={pendingItems}
-            setPendingItems={setPendingItems}
-          />
-        )}
-        {activeTab === 'pendingApproval' && (
-          <PendingApproval
-            pendingItems={pendingItems}
-            setPendingItems={setPendingItems}
-          />
-        )}
+        {activeTab === 'teams' && <Teams />}
+        {activeTab === 'pendingApproval' && <PendingApproval />}
       </div>
     </div>
   );
