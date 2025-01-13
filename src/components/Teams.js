@@ -50,7 +50,7 @@ const App = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <button onClick={handleSave}>임시 저장</button>
+      <button onClick={handleSave}><a style={{ color: 'red' }}>임시 저장 </a></button>
     </div>
   );
 };
