@@ -9,7 +9,7 @@ const App = () => {
 
   const handleSave = async () => {
     try {
-      const webAppUrl = "복사해둔_웹앱_URL"; // 구글 웹 앱 URL
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbx20K_zcgv3JpVeAcoDIcjbKHtHKCnnX_B618C9WP_4sGUcqmSJ7ONiaUMEk_ikH5p3/exec"; // 구글 웹 앱 URL
       // fetch 옵션
       const response = await fetch(webAppUrl, {
         method: 'POST',
