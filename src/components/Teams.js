@@ -1,58 +1,79 @@
-// React 예시 (Teams.js 처럼 작성해볼 수 있음)
-
+// Teams.js
 import React, { useState } from 'react';
 
-const App = () => {
+const Teams = () => {
+  // 폼 입력 상태
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  // 스프레드시트가 Title, Description 컬럼 헤더를 가정
 
+  // Google Apps Script로 배포한 웹 앱 URL
+  const WEB_APP_URL = 'https://script.google.com/macros/s/___/exec'; 
+  // ↑ 실제로는 구글 앱스 스크립트 배포 후 얻은 URL로 교체
+
+  // "임시 저장" 버튼 클릭 시 실행되는 함수
   const handleSave = async () => {
     try {
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbx20K_zcgv3JpVeAcoDIcjbKHtHKCnnX_B618C9WP_4sGUcqmSJ7ONiaUMEk_ikH5p3/exec"; // 구글 웹 앱 URL
-      // fetch 옵션
-      const response = await fetch(webAppUrl, {
+      // fetch로 POST 요청 (application/x-www-form-urlencoded)
+      const response = await fetch(WEB_APP_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
-          Title: title,
-          Description: description
+          Title: title,         // 시트에 "Title" 열이 있어야 함
+          Description: description // 시트에 "Description" 열이 있어야 함
         })
       });
-      const result = await response.json();
-      if (result.result === "success") {
-        alert("스프레드시트에 임시 저장 되었습니다!");
+
+      const result = await response.json(); 
+      console.log('스프레드시트 응답:', result);
+
+      if (result.result === 'success') {
+        alert('스프레드시트에 임시 저장되었습니다!');
+        // 입력값 초기화
         setTitle('');
         setDescription('');
       } else {
-        console.error("Error:", result);
+        alert('스프레드시트에 저장 중 오류가 발생했습니다.');
       }
     } catch (error) {
-      console.error("에러 발생:", error);
+      console.error('저장 요청 중 에러:', error);
+      alert('네트워크 혹은 서버 에러가 발생했습니다.');
     }
   };
 
   return (
-    <div style={{ margin: '20px' }}>
-      <h3>위험작업 등록 (Google Sheets 임시 저장)</h3>
-      <div style={{ marginBottom: '10px' }}>
-        <label>제목: </label>
+    <div className="bg-white shadow-md rounded-lg p-4">
+      <h2 className="text-xl font-bold mb-4">위험작업 등록</h2>
+      
+      <div className="mb-4">
+        <label className="block mb-1 font-medium">작업 제목</label>
         <input
           type="text"
+          className="border border-gray-300 rounded-md px-3 py-2 w-full"
+          placeholder="예: 안전벨트 미착용..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <div style={{ marginBottom: '10px' }}>
-        <label>설명: </label>
+
+      <div className="mb-4">
+        <label className="block mb-1 font-medium">작업 설명</label>
         <textarea
+          className="border border-gray-300 rounded-md px-3 py-2 w-full"
+          rows="3"
+          placeholder="상세 설명을 입력하세요"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <button onClick={handleSave}><a style={{ color: 'red' }}>임시 저장 </a></button>
+
+      <button
+        onClick={handleSave}
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+      >
+        임시 저장
+      </button>
     </div>
   );
 };
 
-export default App;
+export default Teams;
