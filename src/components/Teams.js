@@ -7,7 +7,7 @@ const Teams = () => {
   const [description, setDescription] = useState('');
 
   // Google Apps Script로 배포한 웹 앱 URL
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx20K_zcgv3JpVeAcoDIcjbKHtHKCnnX_B618C9WP_4sGUcqmSJ7ONiaUMEk_ikH5p3/exec'; 
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxEx3U97sAOQfHqPGeclxSeaRvmOnOvShMud5ToiTcSc1Eu1he6j99kxoQDlqqgSvfi/exec'; 
   // ↑ 실제로는 구글 앱스 스크립트 배포 후 얻은 URL로 교체
 
   // "임시 저장" 버튼 클릭 시 실행되는 함수
